@@ -1,0 +1,64 @@
+<project basedir="." default="build" name="jtransforms">
+	<property name="version" value="1.6" />
+
+	<property name="dist.dir" value="../${ant.project.name}-dist" />
+
+	<property name="proj.title" value="JTransforms" />
+
+	<property name="javac.src" value="src" />
+
+	<property name="javac.dest" value="bin" />
+
+	<property name="doc.dest" value="doc" />
+
+	<property name="jar.dir" value="lib" />
+
+	<property name="jar.filename" value="${ant.project.name}-${version}.jar" />
+
+	<property name="tar.excludes" value="**/bin/** **/lib/** **/doc/** **/*.jardesc" />
+
+
+	<target name="clean">
+		<delete dir="${javac.dest}" />
+		<delete dir="${jar.dir}" />
+	</target>
+
+	<target name="clean-dist">
+		<delete dir="${dist.dir}" />
+	</target>
+
+
+	<target name="build" depends="jar">
+	</target>
+
+	<target name="javac" depends="clean">
+		<mkdir dir="${javac.dest}" />
+		<javac srcdir="${javac.src}" destdir="${javac.dest}" includes="**/*.java" deprecation="on" debug="off" source="1.5" target="1.5">
+		</javac>
+	</target>
+
+
+	<target name="jar" depends="javac">
+		<mkdir dir="${jar.dir}" />
+		<jar jarfile="${jar.dir}/${jar.filename}" basedir="${javac.dest}" index="yes" compress="yes" />
+	</target>
+
+
+	<target name="doc">
+		<delete dir="${doc.dest}" />
+		<mkdir dir="${doc.dest}" />
+		<javadoc sourcepath="${javac.src}" destdir="${doc.dest}" public="true" author="true" use="true" splitIndex="true" version="true" doctitle="&lt;h2&gt;JTransforms&lt;/h2&gt;&lt;h4&gt;Multithreaded Fourier Transforms in Java&lt;/h4&gt;&lt;hr&gt;" windowtitle="${proj.title} ${version} - API Specification" header="&lt;b&gt;${proj.title} ${version}&lt;/b&gt;">
+			<packageset dir="${javac.src}" />
+			<link href="http://java.sun.com/j2se/1.5/docs/api/" />
+		</javadoc>
+	</target>
+
+
+	<target name="dist" depends="build, doc, clean-dist">
+		<basename property="proj.basename" file="." />
+		<mkdir dir="${dist.dir}" />
+		<tar tarfile="${dist.dir}/${ant.project.name}-${version}-src.tar.gz" basedir=".." includes="${proj.basename}/" excludes="${tar.excludes}" compression="gzip" longfile="gnu" />
+		<zip zipfile="${dist.dir}/${ant.project.name}-${version}-src.zip" basedir=".." includes="${proj.basename}/" excludes="${tar.excludes}" />
+	</target>
+
+</project>

@@ -1,0 +1,32 @@
+JTransforms changelog
+
+1.6:	July 15, 2008
+	- fixed bug causing error in realForwardFull() and realInverseFull() methods (3D FFT) when multiple threads were used	
+	- added real Discrete Hartley Transforms (DHT)
+	
+1.5:	June 13, 2008
+	- fixed bug causing error when setNumberOfProcessors() was called after creating new instance of a transform 
+	- loop unrolling in scale() 
+	- refactoring in ConcurrencyUtils
+	- improved benchmarks
+
+1.4:	June 4, 2008
+	- fixed bug causing errors in DoubleFFT_2D and FloatFFT_2D 
+
+1.3:	May 7, 2008
+	- from now on, realForward() followed by realInverse() returns the original data
+	- added new variants of 1D transforms that allow to specify the offset in the input array
+	- added new variants of constructors for 1D transforms
+	- refactoring in the utility methods
+	- multiple sizes of each transform are now checked in the accuracy checks
+	- the documentation has been updated
+
+1.2:	January 1, 2008
+	- added true multidimensional variants of 2D and 3D transforms
+	- added single precision transforms   
+
+1.1:	September 23, 2007
+	- added discrete sine transforms 
+
+1.0:	August 29, 2007
+	- initial release
