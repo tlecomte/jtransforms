@@ -1,5 +1,5 @@
 <project basedir="." default="build" name="jtransforms">
-	<property name="version" value="1.6" />
+	<property name="version" value="1.7" />
 
 	<property name="dist.dir" value="../${ant.project.name}-dist" />
 
@@ -15,9 +15,11 @@
 
 	<property name="jar.filename" value="${ant.project.name}-${version}.jar" />
 
-	<property name="tar.excludes" value="**/bin/** **/lib/** **/doc/** **/*.jardesc" />
+	<property name="src.tar.excludes" value="**/bin/** **/lib/** **/doc/** **/*.jardesc" />
 
+	<property name="doc.tar.includes" value="**/doc/**" />
 
+	
 	<target name="clean">
 		<delete dir="${javac.dest}" />
 		<delete dir="${jar.dir}" />
@@ -26,7 +28,6 @@
 	<target name="clean-dist">
 		<delete dir="${dist.dir}" />
 	</target>
-
 
 	<target name="build" depends="jar">
 	</target>
@@ -57,8 +58,10 @@
 	<target name="dist" depends="build, doc, clean-dist">
 		<basename property="proj.basename" file="." />
 		<mkdir dir="${dist.dir}" />
-		<tar tarfile="${dist.dir}/${ant.project.name}-${version}-src.tar.gz" basedir=".." includes="${proj.basename}/" excludes="${tar.excludes}" compression="gzip" longfile="gnu" />
-		<zip zipfile="${dist.dir}/${ant.project.name}-${version}-src.zip" basedir=".." includes="${proj.basename}/" excludes="${tar.excludes}" />
+		<tar tarfile="${dist.dir}/${ant.project.name}-${version}-src.tar.bz2" basedir=".." includes="${proj.basename}/" excludes="${src.tar.excludes}" compression="bzip2" longfile="gnu" />
+		<zip zipfile="${dist.dir}/${ant.project.name}-${version}-src.zip" basedir=".." includes="${proj.basename}/" excludes="${src.tar.excludes}" />
+		<tar tarfile="${dist.dir}/${ant.project.name}-${version}-doc.tar.bz2" basedir=".." includes="${proj.basename}/${doc.tar.includes}" compression="bzip2" longfile="gnu" />
+		<zip zipfile="${dist.dir}/${ant.project.name}-${version}-doc.zip" basedir=".." includes="${proj.basename}/${doc.tar.includes}" />
 	</target>
 
 </project>

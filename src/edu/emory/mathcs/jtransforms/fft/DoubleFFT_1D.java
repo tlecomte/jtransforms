@@ -72,7 +72,7 @@ public class DoubleFFT_1D {
         }
         this.n = n;
         this.ip = new int[2 + (int) Math.ceil(2 + (1 << (int) (Math.log(n + 0.5) / Math.log(2)) / 2))];
-        this.w = new double[n / 2];
+        this.w = new double[n];
     }
 
     /**

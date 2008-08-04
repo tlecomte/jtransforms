@@ -1,5 +1,11 @@
 JTransforms changelog
 
+1.7:	August 4, 2008
+	- fixed bug causing ArrayIndexOutOfBoundsException when 1D FFT transforms were run 
+	  in the following order: realFrowardFull(); complexInverse(); realForwardFull()
+	- added javadoc distribution
+	- bzip2 is used to compress tar archives
+
 1.6:	July 15, 2008
 	- fixed bug causing error in realForwardFull() and realInverseFull() methods (3D FFT) when multiple threads were used	
 	- added real Discrete Hartley Transforms (DHT)
