@@ -102,9 +102,38 @@ public class FloatDHT_1D {
             return;
         fft.realForward(a, offa);
         final float[] b = new float[n];
-        System.arraycopy(a, offa, b, 0, n);
-        int nd2 = n / 2;
         int np = ConcurrencyUtils.getNumberOfProcessors();
+        if ((np > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
+        	Future[] futures = new Future[np];
+			int k = n / np;
+			for (int j = 0; j < np; j++) {
+				final int startidx = j * k;
+				final int length;
+				if (j == np - 1) {
+					length = n - startidx;
+				} else {
+					length = k;
+				}
+				futures[j] = ConcurrencyUtils.threadPool.submit(new Runnable() {
+					public void run() {
+						System.arraycopy(a, offa + startidx, b, startidx, length);
+					}
+				});
+			}
+			try {
+				for (int j = 0; j < np; j++) {
+					futures[j].get();
+				}
+			} catch (ExecutionException ex) {
+				ex.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+        }
+        else {
+        	System.arraycopy(a, offa, b, 0, n);
+        }
+        int nd2 = n / 2;
         if ((np > 1) && (nd2 > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
             final int k1 = nd2 / np;
             Future[] futures = new Future[np];
