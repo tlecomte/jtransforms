@@ -1,5 +1,8 @@
 JTransforms changelog
 
+2.0:	November 19, 2008	
+	- added mixed-radix algorithms for all transforms (no more power-of-two size limitation)
+
 1.7:	August 4, 2008
 	- fixed bug causing ArrayIndexOutOfBoundsException when 1D FFT transforms were run 
 	  in the following order: realFrowardFull(); complexInverse(); realForwardFull()
