@@ -1,41 +1,47 @@
 JTransforms changelog
 
+2.1:	December 12, 2008
+	- Added Bluestein's FFT algorithm that significantly increases the performance and fixes accuracy issues when 
+	  the size of the data is a number with a large prime factor.
+	- Added extra digits to the floating-point constants.
+	- The root mean square (RMS) error is now computed in all accuracy classes.  
+
 2.0:	November 19, 2008	
-	- added mixed-radix algorithms for all transforms (no more power-of-two size limitation)
+	- Added mixed-radix algorithms for all transforms (no more power-of-two size limitation).
 
 1.7:	August 4, 2008
-	- fixed bug causing ArrayIndexOutOfBoundsException when 1D FFT transforms were run 
-	  in the following order: realFrowardFull(); complexInverse(); realForwardFull()
-	- added javadoc distribution
-	- bzip2 is used to compress tar archives
+	- Fixed bug causing ArrayIndexOutOfBoundsException when 1D FFT transforms were run  in the following order:
+	  realFrowardFull(); complexInverse(); realForwardFull().
+	- Added javadoc distribution.
+	- Bzip2 is used to compress tar archives.
 
 1.6:	July 15, 2008
-	- fixed bug causing error in realForwardFull() and realInverseFull() methods (3D FFT) when multiple threads were used	
-	- added real Discrete Hartley Transforms (DHT)
+	- Fixed bug causing error in realForwardFull() and realInverseFull() methods (3D FFT) when multiple threads were used.	
+	- Added real Discrete Hartley Transforms (DHT).
 	
 1.5:	June 13, 2008
-	- fixed bug causing error when setNumberOfProcessors() was called after creating new instance of a transform 
-	- loop unrolling in scale() 
-	- refactoring in ConcurrencyUtils
-	- improved benchmarks
+	- Fixed bug causing error when setNumberOfProcessors() was called after creating new instance of a transform. 
+	- Loop unrolling in scale. 
+	- Refactoring in ConcurrencyUtils.
+	- Improved benchmarks.
 
 1.4:	June 4, 2008
-	- fixed bug causing errors in DoubleFFT_2D and FloatFFT_2D 
+	- Fixed bug causing errors in DoubleFFT_2D and FloatFFT_2D. 
 
 1.3:	May 7, 2008
-	- from now on, realForward() followed by realInverse() returns the original data
-	- added new variants of 1D transforms that allow to specify the offset in the input array
-	- added new variants of constructors for 1D transforms
-	- refactoring in the utility methods
-	- multiple sizes of each transform are now checked in the accuracy checks
-	- the documentation has been updated
+	- From now on, realForward() followed by realInverse() returns the original data.
+	- Added new variants of 1D transforms that allow to specify the offset in the input array.
+	- Added new variants of constructors for 1D transforms.
+	- Refactoring in the utility methods.
+	- Multiple sizes of each transform are now checked in the accuracy checks.
+	- The documentation has been updated.
 
 1.2:	January 1, 2008
-	- added true multidimensional variants of 2D and 3D transforms
-	- added single precision transforms   
+	- Added true multidimensional variants of 2D and 3D transforms.
+	- Added single precision transforms.   
 
 1.1:	September 23, 2007
-	- added discrete sine transforms 
+	- Added discrete sine transforms. 
 
 1.0:	August 29, 2007
-	- initial release
+	- Initial release.
