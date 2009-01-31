@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Piotr Wendykier, Emory University.
- * Portions created by the Initial Developer are Copyright (C) 2007
+ * Portions created by the Initial Developer are Copyright (C) 2007-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Alternatively, the contents of this file may be used under the terms of
@@ -33,8 +33,10 @@
  * ***** END LICENSE BLOCK ***** */
 package edu.emory.mathcs.utils;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 
 /**
@@ -46,7 +48,7 @@ public class ConcurrencyUtils {
     /**
      * Thread pool.
      */
-    public static ExecutorService threadPool = Executors.newCachedThreadPool(new CustomThreadFactory(new CustomExceptionHandler()));
+    private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool(new CustomThreadFactory(new CustomExceptionHandler()));
 
     private static int THREADS_BEGIN_N_1D_FFT_2THREADS = 8192;
 
@@ -56,7 +58,7 @@ public class ConcurrencyUtils {
 
     private static int THREADS_BEGIN_N_3D = 65536;
 
-    private static int np = concurrency();
+    private static int NTHREADS = prevPow2(getNumberOfProcessors());
 
     private ConcurrencyUtils() {
 
@@ -90,37 +92,27 @@ public class ConcurrencyUtils {
      * 
      * @return number of available processors
      */
-    public static int concurrency() {
-        int availableProcessors = Runtime.getRuntime().availableProcessors();
-        if (availableProcessors > 1) {
-            return prevPow2(availableProcessors);
-        } else {
-            return 1;
-        }
-    }
-
-    /**
-     * Returns the number of available processors ( = number of threads used in
-     * calculations).
-     * 
-     * @return the number of available processors
-     */
     public static int getNumberOfProcessors() {
-        return np;
+        return Runtime.getRuntime().availableProcessors();
     }
 
     /**
-     * Sets the number of available processors ( = number of threads used in
-     * calculations). If n is not a power-of-two number, then the number of
-     * available processors is set to the closest power-of-two number less than
-     * n.
+     * Returns the current number of threads.
+     * 
+     * @return the current number of threads.
+     */
+    public static int getNumberOfThreads() {
+        return NTHREADS;
+    }
+
+    /**
+     * Sets the number of threads. If n is not a power-of-two number, then the
+     * number of threads is set to the closest power-of-two number less than n.
      * 
      * @param n
-     * @return the number of available processors
      */
-    public static int setNumberOfProcessors(int n) {
-        np = prevPow2(n);
-        return np;
+    public static void setNumberOfThreads(int n) {
+        NTHREADS = prevPow2(n);
     }
 
     /**
@@ -268,5 +260,48 @@ public class ConcurrencyUtils {
             return false;
         else
             return (x & (x - 1)) == 0;
+    }
+
+    /**
+     * Causes the currently executing thread to sleep (temporarily cease
+     * execution) for the specified number of milliseconds.
+     * 
+     * @param millis
+     */
+    public static void sleep(long millis) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Submits a Runnable task for execution and returns a Future representing
+     * that task.
+     * 
+     * @param task a Runnable task for execution
+     * @return a Future representing the task
+     */
+    public static Future<?> submit(Runnable task) {
+        return THREAD_POOL.submit(task);
+    }
+
+    /**
+     * Waits for all threads to complete computation.
+     * 
+     * @param futures
+     */
+    public static void waitForCompletion(Future<?>[] futures) {
+        int size = futures.length;
+        try {
+            for (int j = 0; j < size; j++) {
+                futures[j].get();
+            }
+        } catch (ExecutionException ex) {
+            ex.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

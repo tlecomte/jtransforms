@@ -15,7 +15,7 @@
  *
  * The Initial Developer of the Original Code is
  * Piotr Wendykier, Emory University.
- * Portions created by the Initial Developer are Copyright (C) 2007
+ * Portions created by the Initial Developer are Copyright (C) 2007-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Alternatively, the contents of this file may be used under the terms of
@@ -40,7 +40,7 @@ import java.util.Date;
 import java.util.Random;
 
 /**
- * IO utilities.
+ * I/O utilities.
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */

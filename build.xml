@@ -1,5 +1,5 @@
 <project basedir="." default="build" name="jtransforms">
-	<property name="version" value="2.1" />
+	<property name="version" value="2.2" />
 
 	<property name="dist.dir" value="../${ant.project.name}-dist" />
 
