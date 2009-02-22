@@ -81,9 +81,9 @@ public class FloatFFT_1D {
 
     private static final int[] factors = { 4, 2, 3, 5 };
 
-    private static final double PI = 3.14159265358979311599796346854418516;
+    private static final float PI = 3.14159265358979311599796346854418516f;
 
-    private static final double TWO_PI = 6.28318530717958623199592693708837032;
+    private static final float TWO_PI = 6.28318530717958623199592693708837032f;
 
     /**
      * Creates new instance of FloatFFT_1D.
@@ -144,10 +144,10 @@ public class FloatFFT_1D {
 
     /**
      * Computes 1D forward DFT of complex data leaving the result in
-     * <code>a</code>. Complex number is stored as two float values in sequence:
-     * the real and imaginary part, i.e. the size of the input array must be
-     * greater or equal 2*n. The physical layout of the input data has to be as
-     * follows:
+     * <code>a</code>. Complex number is stored as two float values in
+     * sequence: the real and imaginary part, i.e. the size of the input array
+     * must be greater or equal 2*n. The physical layout of the input data has
+     * to be as follows:<br>
      * 
      * <pre>
      * a[2*k] = Re[k], 
@@ -163,10 +163,10 @@ public class FloatFFT_1D {
 
     /**
      * Computes 1D forward DFT of complex data leaving the result in
-     * <code>a</code>. Complex number is stored as two float values in sequence:
-     * the real and imaginary part, i.e. the size of the input array must be
-     * greater or equal 2*n. The physical layout of the input data has to be as
-     * follows:
+     * <code>a</code>. Complex number is stored as two float values in
+     * sequence: the real and imaginary part, i.e. the size of the input array
+     * must be greater or equal 2*n. The physical layout of the input data has
+     * to be as follows:<br>
      * 
      * <pre>
      * a[offa+2*k] = Re[k], 
@@ -196,10 +196,10 @@ public class FloatFFT_1D {
 
     /**
      * Computes 1D inverse DFT of complex data leaving the result in
-     * <code>a</code>. Complex number is stored as two float values in sequence:
-     * the real and imaginary part, i.e. the size of the input array must be
-     * greater or equal 2*n. The physical layout of the input data has to be as
-     * follows:
+     * <code>a</code>. Complex number is stored as two float values in
+     * sequence: the real and imaginary part, i.e. the size of the input array
+     * must be greater or equal 2*n. The physical layout of the input data has
+     * to be as follows:<br>
      * 
      * <pre>
      * a[2*k] = Re[k], 
@@ -217,10 +217,10 @@ public class FloatFFT_1D {
 
     /**
      * Computes 1D inverse DFT of complex data leaving the result in
-     * <code>a</code>. Complex number is stored as two float values in sequence:
-     * the real and imaginary part, i.e. the size of the input array must be
-     * greater or equal 2*n. The physical layout of the input data has to be as
-     * follows:
+     * <code>a</code>. Complex number is stored as two float values in
+     * sequence: the real and imaginary part, i.e. the size of the input array
+     * must be greater or equal 2*n. The physical layout of the input data has
+     * to be as follows:<br>
      * 
      * <pre>
      * a[offa+2*k] = Re[k], 
@@ -257,7 +257,7 @@ public class FloatFFT_1D {
      * Computes 1D forward DFT of real data leaving the result in <code>a</code>
      * . The physical layout of the output data is as follows:<br>
      * 
-     * If n is even then:
+     * if n is even then
      * 
      * <pre>
      * a[2*k] = Re[k], 0&lt;=k&lt;n/2
@@ -289,7 +289,7 @@ public class FloatFFT_1D {
      * Computes 1D forward DFT of real data leaving the result in <code>a</code>
      * . The physical layout of the output data is as follows:<br>
      * 
-     * If n is even then:
+     * if n is even then
      * 
      * <pre>
      * a[offa+2*k] = Re[k], 0&lt;=k&lt;n/2
@@ -448,7 +448,7 @@ public class FloatFFT_1D {
      * Computes 1D inverse DFT of real data leaving the result in <code>a</code>
      * . The physical layout of the input data has to be as follows:<br>
      * 
-     * If n is even then:
+     * if n is even then
      * 
      * <pre>
      * a[2*k] = Re[k], 0&lt;=k&lt;n/2
@@ -516,7 +516,7 @@ public class FloatFFT_1D {
             return;
         switch (plan) {
         case SPLIT_RADIX:
-            a[offa + 1] = (float) (0.5 * (a[offa] - a[offa + 1]));
+            a[offa + 1] = (float)(0.5 * (a[offa] - a[offa + 1]));
             a[offa] -= a[offa + 1];
             if (n > 4) {
                 rftfsub(n, a, offa, nc, w, nw);
@@ -737,13 +737,13 @@ public class FloatFFT_1D {
 
         final int twon = 2 * n;
         final int fourn = 4 * n;
-        double argh;
+        float argh;
         int idot, ntry = 0, i, j;
-        double argld;
+        float argld;
         int i1, k1, l1, l2, ib;
-        double fi;
+        float fi;
         int ld, ii, nf, ip, nl, nq, nr;
-        double arg;
+        float arg;
         int ido, ipm;
 
         nl = n;
@@ -777,7 +777,7 @@ public class FloatFFT_1D {
         }
         wtable[offw + fourn] = n;
         wtable[offw + 1 + fourn] = nf;
-        argh = TWO_PI / (double) n;
+        argh = TWO_PI / (float) n;
         i = 1;
         l1 = 1;
         for (k1 = 1; k1 <= nf; k1++) {
@@ -799,8 +799,8 @@ public class FloatFFT_1D {
                     fi += 1;
                     arg = fi * argld;
                     int idx = i + twon;
-                    wtable[offw + idx - 1] = (float) Math.cos(arg);
-                    wtable[offw + idx] = (float) Math.sin(arg);
+                    wtable[offw + idx - 1] = (float)Math.cos(arg);
+                    wtable[offw + idx] = (float)Math.sin(arg);
                 }
                 if (ip > 5) {
                     int idx1 = i1 + twon;
@@ -820,13 +820,13 @@ public class FloatFFT_1D {
 
         final int twon = 2 * n;
         final int fourn = 4 * n;
-        double argh;
+        float argh;
         int idot, ntry = 0, i, j;
-        double argld;
+        float argld;
         int i1, k1, l1, l2, ib;
-        double fi;
+        float fi;
         int ld, ii, nf, ip, nl, nq, nr;
-        double arg;
+        float arg;
         int ido, ipm;
 
         nl = n;
@@ -860,7 +860,7 @@ public class FloatFFT_1D {
         }
         wtable[fourn] = n;
         wtable[1 + fourn] = nf;
-        argh = TWO_PI / (double) n;
+        argh = TWO_PI / (float) n;
         i = 1;
         l1 = 1;
         for (k1 = 1; k1 <= nf; k1++) {
@@ -882,8 +882,8 @@ public class FloatFFT_1D {
                     fi += 1;
                     arg = fi * argld;
                     int idx = i + twon;
-                    wtable[idx - 1] = (float) Math.cos(arg);
-                    wtable[idx] = (float) Math.sin(arg);
+                    wtable[idx - 1] = (float)Math.cos(arg);
+                    wtable[idx] = (float)Math.sin(arg);
                 }
                 if (ip > 5) {
                     int idx1 = i1 + twon;
@@ -902,13 +902,13 @@ public class FloatFFT_1D {
         if (n == 1)
             return;
         final int twon = 2 * n;
-        double argh;
+        float argh;
         int ntry = 0, i, j;
-        double argld;
+        float argld;
         int k1, l1, l2, ib;
-        double fi;
+        float fi;
         int ld, ii, nf, ip, nl, is, nq, nr;
-        double arg;
+        float arg;
         int ido, ipm;
         int nfm1;
 
@@ -967,8 +967,8 @@ public class FloatFFT_1D {
                     fi += 1;
                     arg = fi * argld;
                     int idx = i + n;
-                    wtable_r[idx - 2] = (float) Math.cos(arg);
-                    wtable_r[idx - 1] = (float) Math.sin(arg);
+                    wtable_r[idx - 2] = (float)Math.cos(arg);
+                    wtable_r[idx - 1] = (float)Math.sin(arg);
                 }
                 is += ido;
             }
@@ -978,8 +978,8 @@ public class FloatFFT_1D {
 
     private void bluesteini() {
         int k = 0;
-        double arg;
-        double pi_n = PI / n;
+        float arg;
+        float pi_n = PI / n;
         bk1[0] = 1;
         bk1[1] = 0;
         for (int i = 1; i < n; i++) {
@@ -987,10 +987,10 @@ public class FloatFFT_1D {
             if (k >= 2 * n)
                 k -= 2 * n;
             arg = pi_n * k;
-            bk1[2 * i] = (float) Math.cos(arg);
-            bk1[2 * i + 1] = (float) Math.sin(arg);
+            bk1[2 * i] = (float)Math.cos(arg);
+            bk1[2 * i + 1] = (float)Math.sin(arg);
         }
-        float scale = (float) (1.0 / nBluestein);
+        float scale = (float)(1.0 / nBluestein);
         bk2[0] = bk1[0] * scale;
         bk2[1] = bk1[1] * scale;
         for (int i = 2; i < 2 * n; i += 2) {
@@ -1004,32 +1004,32 @@ public class FloatFFT_1D {
 
     private void makewt(int nw) {
         int j, nwh, nw0, nw1;
-        float wn4r, wk1r, wk1i, wk3r, wk3i;
-        double delta, delta2, deltaj, deltaj3;
+        float delta, wn4r, wk1r, wk1i, wk3r, wk3i;
+        float delta2, deltaj, deltaj3;
 
         ip[0] = nw;
         ip[1] = 1;
         if (nw > 2) {
             nwh = nw >> 1;
-            delta = 0.785398163397448278999490867136046290 / nwh;
+            delta = (float)(0.785398163397448278999490867136046290 / nwh);
             delta2 = delta * 2;
-            wn4r = (float) Math.cos(delta * nwh);
+            wn4r = (float)Math.cos(delta * nwh);
             w[0] = 1;
-            w[1] = (float) wn4r;
+            w[1] = wn4r;
             if (nwh == 4) {
-                w[2] = (float) Math.cos(delta2);
-                w[3] = (float) Math.sin(delta2);
+                w[2] = (float)Math.cos(delta2);
+                w[3] = (float)Math.sin(delta2);
             } else if (nwh > 4) {
                 makeipt(nw);
-                w[2] = (float) (0.5 / Math.cos(delta2));
-                w[3] = (float) (0.5 / Math.cos(delta * 6));
+                w[2] = (float)(0.5 / Math.cos(delta2));
+                w[3] = (float)(0.5 / Math.cos(delta * 6));
                 for (j = 4; j < nwh; j += 4) {
                     deltaj = delta * j;
                     deltaj3 = 3 * deltaj;
-                    w[j] = (float) Math.cos(deltaj);
-                    w[j + 1] = (float) Math.sin(deltaj);
-                    w[j + 2] = (float) Math.cos(deltaj3);
-                    w[j + 3] = (float) -Math.sin(deltaj3);
+                    w[j] = (float)Math.cos(deltaj);
+                    w[j + 1] = (float)Math.sin(deltaj);
+                    w[j + 2] = (float)Math.cos(deltaj3);
+                    w[j + 3] = (float)-Math.sin(deltaj3);
                 }
             }
             nw0 = 0;
@@ -1046,8 +1046,8 @@ public class FloatFFT_1D {
                 } else if (nwh > 4) {
                     wk1r = w[nw0 + 4];
                     wk3r = w[nw0 + 6];
-                    w[nw1 + 2] = (float) (0.5 / wk1r);
-                    w[nw1 + 3] = (float) (0.5 / wk3r);
+                    w[nw1 + 2] = (float)(0.5 / wk1r);
+                    w[nw1 + 3] = (float)(0.5 / wk3r);
                     for (j = 4; j < nwh; j += 4) {
                         int idx1 = nw0 + 2 * j;
                         int idx2 = nw1 + j;
@@ -1086,18 +1086,18 @@ public class FloatFFT_1D {
 
     private void makect(int nc, float[] c, int startc) {
         int j, nch;
-        double delta, deltaj;
+        float delta, deltaj;
 
         ip[1] = nc;
         if (nc > 1) {
             nch = nc >> 1;
-            delta = 0.785398163397448278999490867136046290 / nch;
-            c[startc] = (float) Math.cos(delta * nch);
-            c[startc + nch] = (float) (0.5 * c[startc]);
+            delta = (float)(0.785398163397448278999490867136046290 / nch);
+            c[startc] = (float)Math.cos(delta * nch);
+            c[startc + nch] = (float)(0.5 * c[startc]);
             for (j = 1; j < nch; j++) {
                 deltaj = delta * j;
-                c[startc + j] = (float) (0.5 * Math.cos(deltaj));
-                c[startc + nc - j] = (float) (0.5 * Math.sin(deltaj));
+                c[startc + j] =  (float)(0.5 * Math.cos(deltaj));
+                c[startc + nc - j] = (float)(0.5 * Math.sin(deltaj));
             }
         }
     }
@@ -2742,12 +2742,12 @@ public class FloatFFT_1D {
       --------------------------------------------------------*/
     void radfg(final int ido, final int ip, final int l1, final int idl1, final float in[], final int in_off, final float out[], final int out_off, final int offset) {
         int idij, ipph, j2, ic, jc, lc, is, nbd;
-        float dc2, ai1, ai2, ar1, ar2, ds2, dcp, dsp, ar1h, ar2h, w1r, w1i;
+        float dc2, ai1, ai2, ar1, ar2, ds2, dcp, arg, dsp, ar1h, ar2h, w1r, w1i;
         int iw1 = offset;
 
-        double arg = TWO_PI / (double) ip;
-        dcp = (float) Math.cos(arg);
-        dsp = (float) Math.sin(arg);
+        arg = TWO_PI / (float) ip;
+        dcp = (float)Math.cos(arg);
+        dsp = (float)Math.sin(arg);
         ipph = (ip + 1) / 2;
         nbd = (ido - 1) / 2;
         if (ido != 1) {
@@ -3033,12 +3033,12 @@ public class FloatFFT_1D {
         int idij, ipph, j2, ic, jc, lc, is;
         float dc2, ai1, ai2, ar1, ar2, ds2, w1r, w1i;
         int nbd;
-        float dcp, dsp, ar1h, ar2h;
+        float dcp, arg, dsp, ar1h, ar2h;
         int iw1 = offset;
 
-        double arg = TWO_PI / (double) ip;
-        dcp = (float) Math.cos(arg);
-        dsp = (float) Math.sin(arg);
+        arg = TWO_PI / (float) ip;
+        dcp = (float)Math.cos(arg);
+        dsp = (float)Math.sin(arg);
         nbd = (ido - 1) / 2;
         ipph = (ip + 1) / 2;
         int idx0 = ip * ido;
@@ -6501,7 +6501,7 @@ public class FloatFFT_1D {
         for (int j = 2; j < m; j += 2) {
             k = n - j;
             kk += ks;
-            wkr = (float) (0.5 - c[startc + nc - kk]);
+            wkr = (float)(0.5 - c[startc + nc - kk]);
             wki = c[startc + kk];
             idx1 = offa + j;
             idx2 = offa + k;
@@ -6528,7 +6528,7 @@ public class FloatFFT_1D {
         for (int j = 2; j < m; j += 2) {
             k = n - j;
             kk += ks;
-            wkr = (float) (0.5 - c[startc + nc - kk]);
+            wkr = (float)(0.5 - c[startc + nc - kk]);
             wki = c[startc + kk];
             idx1 = offa + j;
             idx2 = offa + k;
@@ -6544,7 +6544,7 @@ public class FloatFFT_1D {
     }
 
     private void scale(final float m, final float[] a, int offa, boolean complex) {
-        final float norm = (float) (1.0 / m);
+        final float norm = (float)(1.0 / m);
         int n2;
         if (complex) {
             n2 = 2 * n;

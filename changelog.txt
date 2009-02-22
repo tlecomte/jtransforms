@@ -1,9 +1,13 @@
 JTransforms changelog
 
+2.3:	...
+	- Performance improvements for 3D FFT (realForwardFull() and realInverseFull() for not power-of-two sizes).
+	- Cosmetic changes.
+
 2.2:	January 30, 2009
-	- Fixed race condition in 3D FFT (realForwardFull() and realInverseFull()).
+	- Fixed race condition in 3D FFT (realForwardFull() and realInverseFull() for not power-of-two sizes).
 	- Refactoring in ConcurrencyUtils.
-	- Some cosmetic changes.	 
+	- Cosmetic changes.	 
 
 2.1:	December 12, 2008
 	- Added Bluestein's FFT algorithm that significantly increases the performance and fixes accuracy issues when 
