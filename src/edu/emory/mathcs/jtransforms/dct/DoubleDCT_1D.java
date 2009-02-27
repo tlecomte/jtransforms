@@ -44,7 +44,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * size of data can be an arbitrary number. This is a parallel implementation of
  * split-radix and mixed-radix algorithms optimized for SMP systems. <br>
  * <br>
- * This code is derived from General Purpose FFT Package written by Takuya Ooura
+ * Part of the code is derived from General Purpose FFT Package written by Takuya Ooura
  * (http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html)
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)

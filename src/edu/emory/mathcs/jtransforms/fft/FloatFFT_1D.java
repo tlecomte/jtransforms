@@ -51,7 +51,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * 
  */
-public class FloatFFT_1D {
+public strictfp class FloatFFT_1D {
 
     private static enum Plans {
         SPLIT_RADIX, MIXED_RADIX, BLUESTEIN
