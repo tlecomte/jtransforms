@@ -170,8 +170,8 @@ public class DoubleFFT_1DTest {
      */
     public void readData(final String name, final double[] data) {
         try {
-            final String path = getClass().getPackage().getName()
-                    .replace(".", "/");
+            // final String path = getClass().getPackage().getName()
+            // .replace(".", "/");
             // final File f = new File(getClass().getClassLoader()
             // .getResource(path + "/resources/" + name).getFile());
             final File f = new File(getClass().getClassLoader()
