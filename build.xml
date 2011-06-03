@@ -1,236 +1,151 @@
 <project basedir="." default="build" name="jtransforms">
-  <property name="version"
-            value="2.3" />
+	<property name="version" value="2.4-SNAPSHOT" />
 
-  <property name="dist.dir"
-            value="../${ant.project.name}-dist" />
+	<property name="dist.dir" value="../${ant.project.name}-dist" />
 
-  <property name="proj.title"
-            value="JTransforms" />
+	<property name="proj.title" value="JTransforms" />
 
-  <property name="javac.src"
-            value="src" />
+	<property name="javac.src" value="src" />
 
-  <property name="javac.dest"
-            value="bin" />
+	<property name="javac.dest" value="bin" />
 
-  <property name="doc.dest"
-            value="doc" />
+	<property name="doc.dest" value="doc" />
 
-  <property name="jar.dir"
-            value="lib" />
+	<property name="jar.dir" value="lib" />
 
-  <property name="jar.filename"
-            value="${ant.project.name}-${version}.jar" />
+	<property name="jar.filename" value="${ant.project.name}-${version}.jar" />
 
-  <property name="src.tar.excludes"
-            value="**/bin/** **/lib/** **/doc/** **/*.jardesc" />
+	<property name="src.tar.excludes" value="**/bin/** **/lib/** **/doc/** **/*.jardesc" />
 
-  <property name="doc.tar.includes"
-            value="**/doc/**" />
+	<property name="doc.tar.includes" value="**/doc/**" />
 
-  <property name="tests.src.dir"
-            value="test" />
+	<property name="tests.src.dir" value="test" />
 
-  <property name="reports.dir"
-            location="reports" />
+	<property name="tests.resources.dir" location="resources" />
 
-  <property name="tests.reports.dir"
-            location="${reports.dir}/junit" />
+	<property name="reports.dir" location="reports" />
 
-  <property name="coverage.reports.dir"
-            location="${reports.dir}/cobertura" />
+	<property name="tests.reports.dir" location="${reports.dir}/junit" />
 
-  <property name="external.libs.dir"
-            location="lib/ext" />
+	<property name="coverage.reports.dir" location="${reports.dir}/cobertura" />
 
-  <path id="project.class.path">
-    <fileset dir="${external.libs.dir}"
-             includes="**/*.jar" />
-  </path>
+	<property name="external.libs.dir" location="lib/ext" />
 
-  <!-- Define the cobertura Ant task for code coverage analysis -->
-  <taskdef classpathref="project.class.path"
-           resource="tasks.properties" />
+	<path id="project.class.path">
+		<fileset dir="${external.libs.dir}" includes="**/*.jar" />
+	</path>
 
-  <target name="clean">
-    <delete dir="${javac.dest}" />
-    <delete file="${jar.dir}/${jar.filename}" />
-    <delete dir="${tests.classes.dir}" />
-    <delete dir="${reports.dir}" />
-    <delete dir="${instrumented.classes.dir}" />
-    <delete file="cobertura.ser" />
-  </target>
+	<!-- Define the cobertura Ant task for code coverage analysis -->
+	<taskdef classpathref="project.class.path" resource="tasks.properties" />
+
+	<target name="clean">
+		<delete dir="${javac.dest}" failonerror="false" />
+		<delete file="${jar.dir}/${jar.filename}" failonerror="false" />
+		<delete dir="${tests.classes.dir}" failonerror="false" />
+		<delete dir="${reports.dir}" failonerror="false" />
+		<delete dir="${instrumented.classes.dir}" failonerror="false" />
+	</target>
 
 
-  <target name="clean-dist">
-    <delete dir="${dist.dir}" />
-  </target>
+	<target name="clean-dist">
+		<delete dir="${dist.dir}" failonerror="false" />
+	</target>
 
 
-  <target name="build"
-          depends="jar" />
+	<target name="build" depends="jar" />
 
 
-  <target name="javac"
-          depends="clean"
-          description="Compilation of java classes and unit-tests">
-    <mkdir dir="${javac.dest}" />
-    <javac srcdir="${javac.src}"
-           destdir="${javac.dest}"
-           includes="**/*.java"
-           includeantruntime="false"
-           deprecation="true"
-           debug="false"
-           source="1.5"
-           target="1.5" />
-    <javac srcdir="${tests.src.dir}"
-           destdir="${javac.dest}"
-           includes="**/*.java"
-           classpathref="project.class.path"
-           includeantruntime="false"
-           deprecation="true"
-           debug="false"
-           source="1.5"
-           target="1.5" />
-  </target>
+	<target name="javac" depends="clean" description="Compilation of java classes and unit-tests">
+		<mkdir dir="${javac.dest}" />
+		<javac srcdir="${javac.src}" destdir="${javac.dest}" includes="**/*.java" includeantruntime="false" deprecation="true" debug="false" source="1.5" target="1.5" />
+		<javac srcdir="${tests.src.dir}" destdir="${javac.dest}" includes="**/*.java" classpathref="project.class.path" includeantruntime="false" deprecation="true" debug="false" source="1.5" target="1.5" />
+	</target>
 
 
-  <target name="javac-debug"
-          depends="clean"
-          description="Compilation of java classes and unit-tests with debug options on.">
-    <mkdir dir="${javac.dest}" />
-    <javac srcdir="${javac.src}"
-           destdir="${javac.dest}"
-           includes="**/*.java"
-           includeantruntime="false"
-           deprecation="true"
-           debug="on" debuglevel="vars,lines,source"
-           source="1.5"
-           target="1.5" />
-    <javac srcdir="${tests.src.dir}"
-           destdir="${javac.dest}"
-           includes="**/*.java"
-           classpathref="project.class.path"
-           includeantruntime="false"
-           deprecation="true"
-           debug="true"
-           debuglevel="vars,lines,source"
-           source="1.5" target="1.5" />
-  </target>
+	<target name="javac-debug" depends="clean" description="Compilation of java classes and unit-tests with debug options on.">
+		<mkdir dir="${javac.dest}" />
+		<javac srcdir="${javac.src}" destdir="${javac.dest}" includes="**/*.java" includeantruntime="false" deprecation="true" debug="on" debuglevel="vars,lines,source" source="1.5" target="1.5" />
+		<javac srcdir="${tests.src.dir}" destdir="${javac.dest}" includes="**/*.java" classpathref="project.class.path" includeantruntime="false" deprecation="true" debug="true" debuglevel="vars,lines,source" source="1.5" target="1.5" />
+	</target>
 
 
-  <target name="jar"
-          depends="javac">
-    <mkdir dir="${jar.dir}" />
-    <jar jarfile="${jar.dir}/${jar.filename}" basedir="${javac.dest}" index="yes" compress="yes" />
-  </target>
+	<target name="jar" depends="javac">
+		<mkdir dir="${jar.dir}" />
+		<jar jarfile="${jar.dir}/${jar.filename}" basedir="${javac.dest}" index="yes" compress="yes" />
+	</target>
 
 
-  <target name="doc">
-    <delete dir="${doc.dest}" />
-    <mkdir dir="${doc.dest}" />
-    <javadoc sourcepath="${javac.src}"
-             destdir="${doc.dest}"
-             public="true"
-             author="true"
-             use="true"
-             splitIndex="true"
-             version="true"
-             doctitle="&lt;h2&gt;JTransforms&lt;/h2&gt;&lt;h4&gt;Multithreaded Fourier Transforms in Java&lt;/h4&gt;&lt;hr&gt;"
-             windowtitle="${proj.title} ${version} - API Specification"
-             header="&lt;b&gt;${proj.title} ${version}&lt;/b&gt;">
-      <packageset dir="${javac.src}" />
-      <link href="http://java.sun.com/j2se/1.5/docs/api/" />
-    </javadoc>
-  </target>
+	<target name="doc">
+		<delete dir="${doc.dest}" />
+		<mkdir dir="${doc.dest}" />
+		<javadoc sourcepath="${javac.src}" destdir="${doc.dest}" public="true" author="true" use="true" splitIndex="true" version="true" doctitle="&lt;h2&gt;JTransforms&lt;/h2&gt;&lt;h4&gt;Multithreaded Fourier Transforms in Java&lt;/h4&gt;&lt;hr&gt;" windowtitle="${proj.title} ${version} - API Specification" header="&lt;b&gt;${proj.title} ${version}&lt;/b&gt;">
+			<packageset dir="${javac.src}" />
+			<packageset dir="${tests.src.dir}" />
+			<link href="http://java.sun.com/j2se/1.5/docs/api/" />
+		</javadoc>
+	</target>
 
 
-  <target name="dist"
-          depends="build, doc, clean-dist">
-    <basename property="proj.basename"
-              file="." />
-    <mkdir dir="${dist.dir}" />
-    <tar tarfile="${dist.dir}/${ant.project.name}-${version}-src.tar.bz2"
-         basedir=".."
-         includes="${proj.basename}/"
-         excludes="${src.tar.excludes}"
-         compression="bzip2"
-         longfile="gnu" />
-    <zip zipfile="${dist.dir}/${ant.project.name}-${version}-src.zip"
-         basedir=".."
-         includes="${proj.basename}/"
-         excludes="${src.tar.excludes}" />
-    <tar tarfile="${dist.dir}/${ant.project.name}-${version}-doc.tar.bz2"
-         basedir=".."
-         includes="${proj.basename}/${doc.tar.includes}"
-         compression="bzip2"
-         longfile="gnu" />
-    <zip zipfile="${dist.dir}/${ant.project.name}-${version}-doc.zip"
-         basedir=".."
-         includes="${proj.basename}/${doc.tar.includes}" />
-  </target>
+	<target name="dist" depends="build, doc, clean-dist">
+		<basename property="proj.basename" file="." />
+		<mkdir dir="${dist.dir}" />
+		<tar tarfile="${dist.dir}/${ant.project.name}-${version}-src.tar.bz2" basedir=".." includes="${proj.basename}/" excludes="${src.tar.excludes}" compression="bzip2" longfile="gnu" />
+		<zip zipfile="${dist.dir}/${ant.project.name}-${version}-src.zip" basedir=".." includes="${proj.basename}/" excludes="${src.tar.excludes}" />
+		<tar tarfile="${dist.dir}/${ant.project.name}-${version}-doc.tar.bz2" basedir=".." includes="${proj.basename}/${doc.tar.includes}" compression="bzip2" longfile="gnu" />
+		<zip zipfile="${dist.dir}/${ant.project.name}-${version}-doc.zip" basedir=".." includes="${proj.basename}/${doc.tar.includes}" />
+	</target>
 
 
-  <target name="instrument-classes"
-          depends="javac-debug"
-          description="Instrumentation of classes for code coverage with cobertura">
-    <cobertura-instrument todir="${javac.dest}">
-      <fileset dir="${javac.dest}">
-        <include name="**/*.class" />
-        <exclude name="**/*Test.class" />
-      </fileset>
-    </cobertura-instrument>
-  </target>
+	<target name="instrument-classes" depends="javac-debug" description="Instrumentation of classes for code coverage with cobertura">
+		<cobertura-instrument datafile="${coverage.reports.dir}/cobertura.ser" todir="${javac.dest}">
+			<fileset dir="${javac.dest}">
+				<include name="**/*.class" />
+				<exclude name="**/*Test.class" />
+			</fileset>
+		</cobertura-instrument>
+	</target>
 
 
-  <target name="test"
-          depends="instrument-classes"
-          description="Unit-tests and code coverage">
-    <mkdir dir="${tests.reports.dir}" />
-    <junit fork="yes"
-           printsummary="true"
-           haltonfailure="false">
-      <!-- Additional settings for code coverage -->
-      <sysproperty key="net.sourceforge.cobertura.datafile"
-                   file="${basedir}/cobertura.ser" />
-      <classpath location="${javac.dest}" />
-      <classpath refid="project.class.path" />
-      <assertions>
-        <enable />
-      </assertions>
-      <formatter type="xml" />
-      <batchtest todir="${tests.reports.dir}">
-        <fileset dir="${tests.src.dir}">
-          <include name="**/*Test.java" />
-          <exclude name="**/Abstract*.java" />
-        </fileset>
-      </batchtest>
-    </junit>
-  </target>
-  
-  
-  <target name="reports"
-          depends="test"
-          description="HTML reports on tests and code coverage">
-    <junitreport todir="${tests.reports.dir}">
-      <fileset dir="${tests.reports.dir}">
-        <include name="TEST-*.xml" />
-      </fileset>
-      <report format="frames"
-              todir="${tests.reports.dir}" />
-    </junitreport>
-    <delete>
-      <fileset dir="${tests.reports.dir}">
-        <include name="TEST-*.xml" />
-        <include name="TESTS-*.xml" />
-      </fileset>
-    </delete>
-    <cobertura-report format="html"
-                      destdir="${coverage.reports.dir}">
-      <fileset dir="${javac.src}">
-        <include name="**/*.java" />
-      </fileset>
-    </cobertura-report>
-  </target>
+	<target name="test" depends="instrument-classes" description="Unit-tests and code coverage">
+		<mkdir dir="${tests.reports.dir}" />
+		<junit fork="yes" printsummary="true" haltonfailure="false">
+			<!-- Additional settings for code coverage -->
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${coverage.reports.dir}/cobertura.ser" />
+			<classpath location="${javac.dest}" />
+			<classpath location="${tests.resources.dir}" />
+			<classpath refid="project.class.path" />
+			<assertions>
+				<enable />
+			</assertions>
+			<!--<formatter type="plain" usefile="false" />-->
+			<formatter type="xml" />
+			<batchtest todir="${tests.reports.dir}">
+				<fileset dir="${tests.src.dir}">
+					<include name="**/*Test.java" />
+					<exclude name="**/Abstract*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+
+	<target name="reports" depends="test" description="HTML reports on tests and code coverage">
+		<junitreport todir="${tests.reports.dir}">
+			<fileset dir="${tests.reports.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${tests.reports.dir}" />
+		</junitreport>
+		<delete>
+			<fileset dir="${tests.reports.dir}">
+				<include name="TEST-*.xml" />
+				<include name="TESTS-*.xml" />
+			</fileset>
+		</delete>
+		<cobertura-report format="html" datafile="${coverage.reports.dir}/cobertura.ser" destdir="${coverage.reports.dir}">
+			<fileset dir="${javac.src}">
+				<include name="**/*.java" />
+			</fileset>
+		</cobertura-report>
+	</target>
 </project>
