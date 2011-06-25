@@ -1,5 +1,8 @@
 JTransforms changelog
-
+2.4:    not yet released
+    - Added support for unit-tests (JUnit)
+    - Added support for code coverage analysis (Cobertura)
+    - Updated Ant file accordingly
 2.3:	February 27, 2009
 	- Performance improvements for 3D FFT (realForwardFull() and realInverseFull() for not power-of-two sizes).
 	- Cosmetic changes.
