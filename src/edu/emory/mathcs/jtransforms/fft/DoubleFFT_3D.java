@@ -2275,7 +2275,7 @@ public class DoubleFFT_3D {
                     }
                 } else {
                     for (int r = 0; r < rows; r++) {
-                        fftColumns.realInverse(a, idx0 + r * rowStride, scale);
+                        fftColumns.realForward(a, idx0 + r * rowStride);
                     }
                 }
                 if (columns > 4) {
@@ -2435,7 +2435,7 @@ public class DoubleFFT_3D {
                 }
                 if (icr != 0) {
                     for (int r = 0; r < rows; r++) {
-                        fftColumns.realForward(a, idx0 + r * rowStride);
+                        fftColumns.realInverse(a, idx0 + r * rowStride, scale);
                     }
                 }
             }
@@ -2631,7 +2631,7 @@ public class DoubleFFT_3D {
                     }
                 } else {
                     for (int r = 0; r < rows; r++) {
-                        fftColumns.realInverse(a[s][r], 0, scale);
+                        fftColumns.realForward(a[s][r], 0);
                     }
                 }
                 if (columns > 4) {
@@ -2778,7 +2778,7 @@ public class DoubleFFT_3D {
                 }
                 if (icr != 0) {
                     for (int r = 0; r < rows; r++) {
-                        fftColumns.realForward(a[s][r], 0);
+                        fftColumns.realInverse(a[s][r], scale);
                     }
                 }
             }
@@ -3301,7 +3301,7 @@ public class DoubleFFT_3D {
                                 }
                             } else {
                                 for (int r = 0; r < rows; r++) {
-                                    fftColumns.realInverse(a, idx0 + r * rowStride, scale);
+                                    fftColumns.realForward(a, idx0 + r * rowStride);
                                 }
                             }
                             if (columns > 4) {
@@ -3462,7 +3462,8 @@ public class DoubleFFT_3D {
                             }
                             if (icr != 0) {
                                 for (int r = 0; r < rows; r++) {
-                                    fftColumns.realForward(a, idx0 + r * rowStride);
+                                    fftColumns.realInverse(a, idx0 + r
+                                            * rowStride, scale);
                                 }
                             }
                         }
@@ -3697,7 +3698,7 @@ public class DoubleFFT_3D {
                                 }
                             } else {
                                 for (int r = 0; r < rows; r++) {
-                                    fftColumns.realInverse(a[s][r], 0, scale);
+                                    fftColumns.realForward(a[s][r], 0);
                                 }
                             }
                             if (columns > 4) {
@@ -3845,7 +3846,7 @@ public class DoubleFFT_3D {
                             }
                             if (icr != 0) {
                                 for (int r = 0; r < rows; r++) {
-                                    fftColumns.realForward(a[s][r]);
+                                    fftColumns.realInverse(a[s][r], scale);
                                 }
                             }
                         }
