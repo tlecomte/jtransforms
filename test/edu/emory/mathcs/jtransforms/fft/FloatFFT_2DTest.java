@@ -61,7 +61,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <p>
  * In all cases, the test consists in creating a random array of data, and
  * verifying that expected and actual values of its Fourier transform coincide
- * (L2 norm is zero, within a specified accuracy).
+ * within a specified accuracy.
  * </p>
  *
  * @author S&eacute;bastien Brisard
