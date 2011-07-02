@@ -96,6 +96,43 @@
 	</target>
 
 
+	<target name="test" depends="javac" description="Unit-tests, no code coverage">
+		<mkdir dir="${tests.reports.dir}" />
+		<junit fork="yes" printsummary="true" haltonfailure="false">
+			<classpath location="${javac.dest}" />
+			<classpath location="${tests.resources.dir}" />
+			<classpath refid="project.class.path" />
+			<assertions>
+				<enable />
+			</assertions>
+			<!--<formatter type="plain" usefile="false" />-->
+			<formatter type="xml" />
+			<batchtest todir="${tests.reports.dir}">
+				<fileset dir="${tests.src.dir}">
+					<include name="**/*Test.java" />
+					<exclude name="**/Abstract*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+
+	<target name="report" depends="test" description="HTML report on tests">
+		<junitreport todir="${tests.reports.dir}">
+			<fileset dir="${tests.reports.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${tests.reports.dir}" />
+		</junitreport>
+		<delete>
+			<fileset dir="${tests.reports.dir}">
+				<include name="TEST-*.xml" />
+				<include name="TESTS-*.xml" />
+			</fileset>
+		</delete>
+	</target>
+
+
 	<target name="instrument-classes" depends="javac-debug" description="Instrumentation of classes for code coverage with cobertura">
 		<cobertura-instrument datafile="${coverage.reports.dir}/cobertura.ser" todir="${javac.dest}">
 			<fileset dir="${javac.dest}">
@@ -105,8 +142,8 @@
 		</cobertura-instrument>
 	</target>
 
-
-	<target name="test" depends="instrument-classes" description="Unit-tests and code coverage">
+    
+    <target name="coverage-test" depends="instrument-classes" description="Unit-tests and code coverage">
 		<mkdir dir="${tests.reports.dir}" />
 		<junit fork="yes" printsummary="true" haltonfailure="false">
 			<!-- Additional settings for code coverage -->
@@ -129,7 +166,7 @@
 	</target>
 
 
-	<target name="reports" depends="test" description="HTML reports on tests and code coverage">
+	<target name="coverage-report" depends="coverage-test" description="HTML reports on tests and code coverage">
 		<junitreport todir="${tests.reports.dir}">
 			<fileset dir="${tests.reports.dir}">
 				<include name="TEST-*.xml" />
