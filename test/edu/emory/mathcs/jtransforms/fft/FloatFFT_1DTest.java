@@ -51,16 +51,16 @@ import org.junit.runners.Parameterized.Parameters;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
- * This is a series of JUnit tests for the {@link DoubleFFT_1D}. First,
- * {@link DoubleFFT_1D#complexForward(double[])} is tested by comparison with
+ * This is a series of JUnit tests for the {@link FloatFFT_1D}. First,
+ * {@link FloatFFT_1D#complexForward(float[])} is tested by comparison with
  * reference data (FFTW). Then the other methods of this class are tested using
- * {@link DoubleFFT_1D#complexForward(double[])} as a reference.
+ * {@link FloatFFT_1D#complexForward(float[])} as a reference.
  *
  * @author S&eacute;bastien Brisard
  *
  */
 @RunWith(value = Parameterized.class)
-public class DoubleFFT_1DTest {
+public class FloatFFT_1DTest {
     /** Base message of all exceptions. */
     public static final String DEFAULT_MESSAGE = "FFT of size %d: ";
 
@@ -71,7 +71,7 @@ public class DoubleFFT_1DTest {
     private final static String FFTW_OUTPUT_PATTERN = "fftw%d.out";
 
     /** The constant value of the seed of the random generator. */
-    public static final int SEED = 20110602;
+    public static final int SEED = 20110625;
 
     @Parameters
     public static Collection<Object[]> getParameters() {
@@ -89,7 +89,7 @@ public class DoubleFFT_1DTest {
     }
 
     /** The FFT to be tested. */
-    private final DoubleFFT_1D fft;
+    private final FloatFFT_1D fft;
 
     /** The size of the FFT to be tested. */
     private final int n;
@@ -107,19 +107,19 @@ public class DoubleFFT_1DTest {
      * @param seed
      *            the seed of the random generator
      */
-    public DoubleFFT_1DTest(final int n, final int numThreads, final long seed) {
+    public FloatFFT_1DTest(final int n, final int numThreads, final long seed) {
         this.n = n;
-        this.fft = new DoubleFFT_1D(n);
+        this.fft = new FloatFFT_1D(n);
         this.random = new Random(seed);
         ConcurrencyUtils.setThreadsBeginN_1D_FFT_2Threads(512);
         ConcurrencyUtils.setThreadsBeginN_1D_FFT_4Threads(512);
         ConcurrencyUtils.setNumberOfThreads(numThreads);
     }
 
-    public FloatingPointEqualityChecker createEqualityChecker(final double rel,
-            final double abs) {
+    public FloatingPointEqualityChecker createEqualityChecker(final float rel,
+            final float abs) {
         final String msg = String.format(DEFAULT_MESSAGE, n);
-        return new FloatingPointEqualityChecker(msg, rel, abs, 0f, 0f);
+        return new FloatingPointEqualityChecker(msg, 0d, 0d, rel, abs);
     }
 
     /**
@@ -135,10 +135,6 @@ public class DoubleFFT_1DTest {
      */
     public void readData(final String name, final double[] data) {
         try {
-            // final String path = getClass().getPackage().getName()
-            // .replace(".", "/");
-            // final File f = new File(getClass().getClassLoader()
-            // .getResource(path + "/resources/" + name).getFile());
             final File f = new File(getClass().getClassLoader()
                     .getResource(name).getFile());
             final FileInputStream fin = new FileInputStream(f);
@@ -155,43 +151,50 @@ public class DoubleFFT_1DTest {
     }
 
     /**
-     * This is a test of {@link DoubleFFT_1D#complexForward(double[])}. This
+     * This is a test of {@link FloatFFT_1D#complexForward(float[])}. This
      * method is tested by computation of the FFT of some pre-generated data,
      * and comparison with results obtained with FFTW.
      */
     @Test
     public void testComplexForward() {
-        double rel = 1E-9;
-        double x0 = 1E-8;
-        final double abs = rel * x0;
+        float rel = 1E-3f;
+        float x0 = 5E-2f;
+        if ((n == 65530) || (n == 131072)) {
+            rel = 5E-3f;
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[2 * n];
+        final float[] actual = new float[2 * n];
         final double[] expected = new double[2 * n];
-        readData(String.format(FFTW_INPUT_PATTERN, Integer.valueOf(n)), actual);
+        readData(String.format(FFTW_INPUT_PATTERN, Integer.valueOf(n)),
+                expected);
+        for (int index = 0; index < actual.length; index++) {
+            actual[index] = (float) expected[index];
+        }
         readData(String.format(FFTW_OUTPUT_PATTERN, Integer.valueOf(n)),
                 expected);
         fft.complexForward(actual);
         for (int i = 0; i < actual.length; i++) {
-            checker.assertEquals("[" + i + "]", expected[i], actual[i]);
+            checker.assertEquals("[" + i + "]", (float) expected[i], actual[i]);
         }
     }
 
     /**
-     * This is a test of {@link DoubleFFT_1D#complexInverse(double[], boolean)},
+     * This is a test of {@link FloatFFT_1D#complexInverse(float[], boolean)},
      * with the second parameter set to <code>true</code>.
      */
     @Test
     public void testComplexInverseScaled() {
-        double rel = 1E-9;
-        double x0 = 1E-8;
-        final double abs = rel * x0;
+        float rel = 5E-4f;
+        float x0 = 5E-3f;
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[2 * n];
-        final double[] expected = new double[2 * n];
+        final float[] actual = new float[2 * n];
+        final float[] expected = new float[2 * n];
         for (int i = 0; i < 2 * n; i++) {
-            actual[i] = 2. * random.nextDouble() - 1.;
+            actual[i] = (float) (2. * random.nextDouble() - 1.);
             expected[i] = actual[i];
         }
         fft.complexForward(actual);
@@ -202,44 +205,59 @@ public class DoubleFFT_1DTest {
     }
 
     /**
-     * This is a test of {@link DoubleFFT_1D#complexInverse(double[], boolean)},
+     * This is a test of {@link FloatFFT_1D#complexInverse(float[], boolean)},
      * with the second parameter set to <code>false</code>.
      */
     @Test
     public void testComplexInverseUnscaled() {
-        double rel = 1E-9;
-        double x0 = 1E-8;
-        final double abs = rel * x0;
+        float rel = 5E-4f;
+        float x0 = 5E-3f;
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[2 * n];
-        final double[] expected = new double[2 * n];
+        final float[] actual = new float[2 * n];
+        final float[] expected = new float[2 * n];
         for (int i = 0; i < 2 * n; i++) {
-            actual[i] = 2. * random.nextDouble() - 1.;
+            actual[i] = (float) (2. * random.nextDouble() - 1.);
             expected[i] = actual[i];
         }
         fft.complexForward(actual);
         fft.complexInverse(actual, false);
-        final double s = 1. / (double) n;
+        final float s = 1f / (float) n;
         for (int i = 0; i < actual.length; i++) {
             checker.assertEquals("[" + i + "]", expected[i], s * actual[i]);
         }
     }
 
-    /** This is a test of {@link DoubleFFT_1D#realForward(double[])}. */
+    /** This is a test of {@link FloatFFT_1D#realForward(float[])}. */
     @Test
     public void testRealForward() {
-        double rel = 1E-9;
-        double x0 = 1E-8;
-        final double abs = rel * x0;
+        float rel = 5E-4f;
+        float x0 = 5E-3f;
+        if (n == 16384) {
+            rel = 2E-3f;
+        }
+        if (n == 32768) {
+            rel = 5E-3f;
+            x0 = 1E-2f;
+        }
+        if (n == 65536) {
+            rel = 1E-2f;
+            x0 = 1E-2f;
+        }
+        if (n == 131072) {
+            rel = 1E-2f;
+            x0 = 1E-2f;
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[n];
-        final double[] expected = new double[2 * n];
+        final float[] actual = new float[n];
+        final float[] expected = new float[2 * n];
         for (int i = 0; i < n; i++) {
-            actual[i] = 2. * random.nextDouble() - 1.;
+            actual[i] = (float) (2. * random.nextDouble() - 1.);
             expected[2 * i] = actual[i];
-            expected[2 * i + 1] = 0.;
+            expected[2 * i + 1] = 0f;
         }
         fft.complexForward(expected);
         fft.realForward(actual);
@@ -252,20 +270,37 @@ public class DoubleFFT_1DTest {
         }
     }
 
-    /** This is a test of {@link DoubleFFT_1D#realForward(double[])}. */
+    /** This is a test of {@link FloatFFT_1D#realForwardFull(float[])}. */
     @Test
     public void testRealForwardFull() {
-        double rel = 1E-8;
-        double x0 = 5E-6;
-        final double abs = rel * x0;
+        float rel = 5E-4f;
+        float x0 = 5E-3f;
+        if (n == 8192) {
+            rel = 5E-3f;
+        }
+        if (n == 16384) {
+            rel = 5E-3f;
+        }
+        if (n == 32768) {
+            rel = 5E-3f;
+            x0 = 1E-2f;
+        }
+        if (n == 65536) {
+            rel = 1E-2f;
+            x0 = 1E-2f;
+        }
+        if (n == 131072) {
+            rel = 1E-2f;
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[2 * n];
-        final double[] expected = new double[2 * n];
+        final float[] actual = new float[2 * n];
+        final float[] expected = new float[2 * n];
         for (int i = 0; i < n; i++) {
-            actual[i] = 2. * random.nextDouble() - 1.;
+            actual[i] = (float) (2. * random.nextDouble() - 1.);
             expected[2 * i] = actual[i];
-            expected[2 * i + 1] = 0.;
+            expected[2 * i + 1] = 0f;
         }
         fft.complexForward(expected);
         fft.realForwardFull(actual);
@@ -275,22 +310,22 @@ public class DoubleFFT_1DTest {
     }
 
     /**
-     * This is a test of {@link DoubleFFT_1D#realInverseFull(double[], boolean)}
-     * , with the second parameter set to <code>true</code>.
+     * This is a test of {@link FloatFFT_1D#realInverseFull(float[], boolean)} ,
+     * with the second parameter set to <code>true</code>.
      */
     @Test
     public void testRealInverseFullScaled() {
-        double rel = 1E-9;
-        double x0 = 1E-7;
-        final double abs = rel * x0;
+        float rel = 5E-4f;
+        float x0 = 1E-3f;
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[2 * n];
-        final double[] expected = new double[2 * n];
+        final float[] actual = new float[2 * n];
+        final float[] expected = new float[2 * n];
         for (int i = 0; i < n; i++) {
-            actual[i] = 2. * random.nextDouble() - 1.;
+            actual[i] = (float) (2. * random.nextDouble() - 1.);
             expected[2 * i] = actual[i];
-            expected[2 * i + 1] = 0.;
+            expected[2 * i + 1] = 0f;
         }
         fft.realInverseFull(actual, true);
         fft.complexInverse(expected, true);
@@ -300,22 +335,34 @@ public class DoubleFFT_1DTest {
     }
 
     /**
-     * This is a test of {@link DoubleFFT_1D#realInverseFull(double[], boolean)}
-     * , with the second parameter set to <code>false</code>.
+     * This is a test of {@link FloatFFT_1D#realInverseFull(float[], boolean)} ,
+     * with the second parameter set to <code>false</code>.
      */
     @Test
     public void testRealInverseFullUnscaled() {
-        double rel = 1E-7;
-        double x0 = 5E-7;
-        final double abs = rel * x0;
+        float rel = 5E-3f;
+        float x0 = 1E-3f;
+        if (n == 32768) {
+            rel = 1E-2f;
+            x0 = 5E-3f;
+        }
+        if (n == 65536) {
+            rel = 1E-2f;
+            x0 = 1E-2f;
+        }
+        if (n == 131072) {
+            rel = 1E-2f;
+            x0 = 5E-3f;
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[2 * n];
-        final double[] expected = new double[2 * n];
+        final float[] actual = new float[2 * n];
+        final float[] expected = new float[2 * n];
         for (int i = 0; i < n; i++) {
-            actual[i] = 2. * random.nextDouble() - 1.;
+            actual[i] = (float) (2. * random.nextDouble() - 1.);
             expected[2 * i] = actual[i];
-            expected[2 * i + 1] = 0.;
+            expected[2 * i + 1] = 0f;
         }
         fft.realInverseFull(actual, false);
         fft.complexInverse(expected, false);
@@ -325,20 +372,20 @@ public class DoubleFFT_1DTest {
     }
 
     /**
-     * This is a test of {@link DoubleFFT_1D#realInverse(double[], boolean)},
-     * with the second parameter set to <code>true</code>.
+     * This is a test of {@link FloatFFT_1D#realInverse(float[], boolean)}, with
+     * the second parameter set to <code>true</code>.
      */
     @Test
     public void testRealInverseScaled() {
-        double rel = 1E-9;
-        double x0 = 1E-8;
-        final double abs = rel * x0;
+        float rel = 5E-3f;
+        float x0 = 1E-3f;
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[n];
-        final double[] expected = new double[n];
+        final float[] actual = new float[n];
+        final float[] expected = new float[n];
         for (int i = 0; i < n; i++) {
-            actual[i] = 2. * random.nextDouble() - 1.;
+            actual[i] = (float) (2. * random.nextDouble() - 1.);
             expected[i] = actual[i];
         }
         fft.realForward(actual);
@@ -349,20 +396,20 @@ public class DoubleFFT_1DTest {
     }
 
     /**
-     * This is a test of {@link DoubleFFT_1D#realInverse(double[], boolean)},
-     * with the second parameter set to <code>false</code>.
+     * This is a test of {@link FloatFFT_1D#realInverse(float[], boolean)}, with
+     * the second parameter set to <code>false</code>.
      */
     @Test
     public void testRealInverseUnscaled() {
-        double rel = 1E-9;
-        double x0 = 1E-8;
-        final double abs = rel * x0;
+        float rel = 5E-3f;
+        float x0 = 1E-3f;
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[n];
-        final double[] expected = new double[n];
+        final float[] actual = new float[n];
+        final float[] expected = new float[n];
         for (int i = 0; i < n; i++) {
-            actual[i] = 2. * random.nextDouble() - 1.;
+            actual[i] = (float) (2. * random.nextDouble() - 1.);
             expected[i] = actual[i];
         }
         fft.realForward(actual);

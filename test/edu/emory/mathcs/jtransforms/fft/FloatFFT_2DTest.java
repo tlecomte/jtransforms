@@ -43,15 +43,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
-import edu.emory.mathcs.jtransforms.fft.DoubleFFT_2D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * <p>
- * This is a test of the class {@link DoubleFFT_2D}. In this test, a very crude
- * 2d FFT method is implemented (see {@link #complexForward(double[][])}),
- * assuming that {@link DoubleFFT_1D} has been fully tested and validated. This
+ * This is a test of the class {@link FloatFFT_2D}. In this test, a very crude
+ * 2d FFT method is implemented (see {@link #complexForward(float[][])}),
+ * assuming that {@link FloatFFT_1D} has been fully tested and validated. This
  * crude (unoptimized) method is then used to establish <em>expected</em> values
  * of <em>direct</em> Fourier transforms.
  * </p>
@@ -70,12 +68,12 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *
  */
 @RunWith(value = Parameterized.class)
-public class DoubleFFT_2DTest {
+public class FloatFFT_2DTest {
     /** Base message of all exceptions. */
     public static final String DEFAULT_MESSAGE = "FFT of size %dx%d: ";
 
     /** The constant value of the seed of the random generator. */
-    public static final int SEED = 20110602;
+    public static final int SEED = 20110625;
 
     @Parameters
     public static Collection<Object[]> getParameters() {
@@ -86,20 +84,20 @@ public class DoubleFFT_2DTest {
 
         for (int i = 0; i < size.length; i++) {
             for (int j = 0; j < size.length; j++) {
-                final String msg = String.format(DEFAULT_MESSAGE, size[i],
-                        size[j]);
-                parameters.add(new Object[] { size[i], size[j], 1, SEED });
-                parameters.add(new Object[] { size[i], size[j], 4, SEED });
+                if ((size[i] == 1024) || (size[j] == 1024)) {
+                    parameters.add(new Object[] { size[i], size[j], 1, SEED });
+                    parameters.add(new Object[] { size[i], size[j], 4, SEED });
+                }
             }
         }
         return parameters;
     }
 
     /** Fourier transform of the columns. */
-    private final DoubleFFT_1D cfft;
+    private final FloatFFT_1D cfft;
 
     /** The object to be tested. */
-    private final DoubleFFT_2D fft;
+    private final FloatFFT_2D fft;
 
     /** Number of columns of the data arrays to be Fourier transformed. */
     private final int numCols;
@@ -108,7 +106,7 @@ public class DoubleFFT_2DTest {
     private final int numRows;
 
     /** Fourier transform of the rows. */
-    private final DoubleFFT_1D rfft;
+    private final FloatFFT_1D rfft;
 
     /** For the generation of the data arrays. */
     private final Random random;
@@ -125,13 +123,13 @@ public class DoubleFFT_2DTest {
      * @param seed
      *            the seed of the random generator
      */
-    public DoubleFFT_2DTest(final int numRows, final int numColumns,
+    public FloatFFT_2DTest(final int numRows, final int numColumns,
             final int numThreads, final long seed) {
         this.numRows = numRows;
         this.numCols = numColumns;
-        this.rfft = new DoubleFFT_1D(numColumns);
-        this.cfft = new DoubleFFT_1D(numRows);
-        this.fft = new DoubleFFT_2D(numRows, numColumns);
+        this.rfft = new FloatFFT_1D(numColumns);
+        this.cfft = new FloatFFT_1D(numRows);
+        this.fft = new FloatFFT_2D(numRows, numColumns);
         this.random = new Random(seed);
         ConcurrencyUtils.setNumberOfThreads(numThreads);
     }
@@ -142,11 +140,11 @@ public class DoubleFFT_2DTest {
      * @param a
      *            the data to be transformed
      */
-    public void complexForward(final double[][] a) {
+    public void complexForward(final float[][] a) {
         for (int r = 0; r < numRows; r++) {
             rfft.complexForward(a[r]);
         }
-        final double[] buffer = new double[2 * numRows];
+        final float[] buffer = new float[2 * numRows];
         for (int c = 0; c < numCols; c++) {
             for (int r = 0; r < numRows; r++) {
                 buffer[2 * r] = a[r][2 * c];
@@ -160,22 +158,22 @@ public class DoubleFFT_2DTest {
         }
     }
 
-    public FloatingPointEqualityChecker createEqualityChecker(final double rel,
-            final double abs) {
+    public FloatingPointEqualityChecker createEqualityChecker(final float rel,
+            final float abs) {
         final String msg = String.format(DEFAULT_MESSAGE, numRows, numCols);
-        return new FloatingPointEqualityChecker(msg, rel, abs, 0f, 0f);
+        return new FloatingPointEqualityChecker(msg, 0d, 0d, rel, abs);
     }
 
-    /** A test of {@link DoubleFFT_2D#complexForward(double[])}. */
+    /** A test of {@link FloatFFT_2D#complexForward(float[])}. */
     @Test
-    public void testComplexForward1dInput() {
+    public void testComplexForward1fInput() {
         final FloatingPointEqualityChecker checker = createEqualityChecker(
-                Math.ulp(1d), 0d);
-        final double[] actual = new double[2 * numRows * numCols];
-        final double[][] expected = new double[numRows][2 * numCols];
+                Math.ulp(1f), 0f);
+        final float[] actual = new float[2 * numRows * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double rnd = random.nextDouble();
+                final float rnd = random.nextFloat();
                 actual[2 * r * numCols + c] = rnd;
                 expected[r][c] = rnd;
             }
@@ -183,24 +181,24 @@ public class DoubleFFT_2DTest {
         fft.complexForward(actual);
         complexForward(expected);
         for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < 2 * numCols; c++) {
-                final double exp = expected[r][c];
-                final double act = actual[2 * r * numCols + c];
+            for (int c = 0; c < numCols; c++) {
+                final float exp = expected[r][c];
+                final float act = actual[2 * r * numCols + c];
                 checker.assertEquals("[" + r + "][" + c + "]", exp, act);
             }
         }
     }
 
-    /** A test of {@link DoubleFFT_2D#complexForward(double[][])}. */
+    /** A test of {@link FloatFFT_2D#complexForward(float[][])}. */
     @Test
-    public void testComplexForward2dInput() {
+    public void testComplexForward2fInput() {
         final FloatingPointEqualityChecker checker = createEqualityChecker(
-                Math.ulp(1d), 0d);
-        final double[][] actual = new double[numRows][2 * numCols];
-        final double[][] expected = new double[numRows][2 * numCols];
+                Math.ulp(1f), 0f);
+        final float[][] actual = new float[numRows][2 * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double rnd = random.nextDouble();
+                final float rnd = random.nextFloat();
                 actual[r][c] = rnd;
                 expected[r][c] = rnd;
             }
@@ -209,56 +207,56 @@ public class DoubleFFT_2DTest {
         complexForward(expected);
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double exp = expected[r][c];
-                final double act = actual[r][c];
+                final float exp = expected[r][c];
+                final float act = actual[r][c];
                 checker.assertEquals("[" + r + "][" + c + "]", exp, act);
             }
         }
     }
 
     /**
-     * A test of {@link DoubleFFT_2D#complexInverse(double[], boolean)}, with
-     * the second parameter set to <code>true</code>.
+     * A test of {@link FloatFFT_2D#complexInverse(float[], boolean)}, with the
+     * second parameter set to <code>true</code>.
      */
     @Test
-    public void testComplexInverseScaled1dInput() {
-        double rel = 1E-8;
-        double x0 = 5E-8;
-        final double abs = rel * x0;
+    public void testComplexInverseScaled1fInput() {
+        float rel = 2E-4f;
+        float x0 = 5E-3f;
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] expected = new double[2 * numRows * numCols];
-        final double[] actual = new double[2 * numRows * numCols];
+        final float[] expected = new float[2 * numRows * numCols];
+        final float[] actual = new float[2 * numRows * numCols];
         for (int i = 0; i < actual.length; i++) {
-            final double rnd = random.nextDouble();
+            final float rnd = random.nextFloat();
             actual[i] = rnd;
             expected[i] = rnd;
         }
         fft.complexForward(actual);
         fft.complexInverse(actual, true);
         for (int i = 0; i < actual.length; i++) {
-            final double exp = expected[i];
-            final double act = actual[i];
+            final float exp = expected[i];
+            final float act = actual[i];
             checker.assertEquals("[" + i + "]", exp, act);
         }
     }
 
     /**
-     * A test of {@link DoubleFFT_2D#complexInverse(double[][], boolean)}, with
+     * A test of {@link FloatFFT_2D#complexInverse(float[][], boolean)}, with
      * the second parameter set to <code>true</code>.
      */
     @Test
-    public void testComplexInverseScaled2dInput() {
-        double rel = 1E-8;
-        double x0 = 5E-8;
-        final double abs = rel * x0;
+    public void testComplexInverseScaled2fInput() {
+        float rel = 2E-4f;
+        float x0 = 5E-3f;
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[][] expected = new double[numRows][2 * numCols];
-        final double[][] actual = new double[numRows][2 * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
+        final float[][] actual = new float[numRows][2 * numCols];
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double rnd = random.nextDouble();
+                final float rnd = random.nextFloat();
                 actual[r][c] = rnd;
                 expected[r][c] = rnd;
             }
@@ -267,103 +265,140 @@ public class DoubleFFT_2DTest {
         fft.complexInverse(actual, true);
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double exp = expected[r][c];
-                final double act = actual[r][c];
+                final float exp = expected[r][c];
+                final float act = actual[r][c];
                 checker.assertEquals("[" + r + "][" + c + "]", exp, act);
             }
         }
     }
 
     /**
-     * A test of {@link DoubleFFT_2D#complexInverse(double[], boolean)}, with
-     * the second parameter set to <code>false</code>.
+     * A test of {@link FloatFFT_2D#complexInverse(float[], boolean)}, with the
+     * second parameter set to <code>false</code>.
      */
     @Test
-    public void testComplexInverseUnScaled1dInput() {
-        double rel = 1E-8;
-        double x0 = 5E-8;
-        final double abs = rel * x0;
+    public void testComplexInverseUnScaled1fInput() {
+        float rel = 2E-4f;
+        float x0 = 5E-3f;
+        if ((numRows == 1024) || (numCols == 1024)) {
+            rel = 2E-2f;
+            x0 = 5E-1f;
+            if ((numRows == 256) || (numCols == 256)) {
+                rel = 4E-2f;
+            }
+            if ((numRows == 310) || (numCols == 310)) {
+                rel = 5E-2f;
+            }
+            if ((numRows == 511) || (numCols == 511)) {
+                rel = 5E-2f;
+                x0 = 1E-1f;
+            }
+            if ((numRows == 512) || (numCols == 512)) {
+                rel = 4E-2f;
+            }
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] expected = new double[2 * numRows * numCols];
-        final double[] actual = new double[2 * numRows * numCols];
+        final float[] expected = new float[2 * numRows * numCols];
+        final float[] actual = new float[2 * numRows * numCols];
         for (int i = 0; i < actual.length; i++) {
-            final double rnd = random.nextDouble();
+            final float rnd = random.nextFloat();
             actual[i] = rnd;
             expected[i] = rnd;
         }
         fft.complexForward(actual);
         fft.complexInverse(actual, false);
-        final double s = numRows * numCols;
+        final int s = numRows * numCols;
         for (int i = 0; i < actual.length; i++) {
-            final double exp = s * expected[i];
-            final double act = actual[i];
+            final float exp = s * expected[i];
+            final float act = actual[i];
             checker.assertEquals("[" + i + "]", exp, act);
         }
     }
 
     /**
-     * A test of {@link DoubleFFT_2D#complexInverse(double[][], boolean)}, with
+     * A test of {@link FloatFFT_2D#complexInverse(float[][], boolean)}, with
      * the second parameter set to <code>false</code>.
      */
     @Test
-    public void testComplexInverseUnScaled2dInput() {
-        double rel = 1E-8;
-        double x0 = 5E-8;
-        final double abs = rel * x0;
+    public void testComplexInverseUnScaled2fInput() {
+        float rel = 2E-4f;
+        float x0 = 5E-3f;
+        if ((numRows == 1024) || (numCols == 1024)) {
+            rel = 2E-2f;
+            x0 = 5E-1f;
+            if ((numRows == 256) || (numCols == 256)) {
+                rel = 4E-2f;
+            }
+            if ((numRows == 310) || (numCols == 310)) {
+                rel = 5E-2f;
+            }
+            if ((numRows == 511) || (numCols == 511)) {
+                rel = 5E-2f;
+                x0 = 1E-1f;
+            }
+            if ((numRows == 512) || (numCols == 512)) {
+                rel = 4E-2f;
+            }
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[][] expected = new double[numRows][2 * numCols];
-        final double[][] actual = new double[numRows][2 * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
+        final float[][] actual = new float[numRows][2 * numCols];
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double rnd = random.nextDouble();
-                expected[r][c] = rnd;
+                final float rnd = random.nextFloat();
                 actual[r][c] = rnd;
+                expected[r][c] = rnd;
             }
         }
         fft.complexForward(actual);
         fft.complexInverse(actual, false);
-        final double s = numRows * numCols;
+        final int s = numRows * numCols;
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double exp = s * expected[r][c];
-                final double act = actual[r][c];
+                final float exp = s * expected[r][c];
+                final float act = actual[r][c];
                 checker.assertEquals("[" + r + "][" + c + "]", exp, act);
             }
         }
     }
 
-    /** A test of {@link DoubleFFT_2D#realForward(double[])}. */
+    /** A test of {@link FloatFFT_2D#realForward(float[])}. */
     @Test
-    public void testRealForward1dInput() {
+    public void testRealForward1fInput() {
         if (!ConcurrencyUtils.isPowerOf2(numRows)) {
             return;
         }
         if (!ConcurrencyUtils.isPowerOf2(numCols)) {
             return;
         }
-        double rel = 1E-8;
-        double x0 = 5E-8;
-        final double abs = rel * x0;
+        float rel = 5E-3f;
+        float x0 = 1E-2f;
+        if ((numRows == 1024) || (numCols == 1024)) {
+            rel = 1E-2f;
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[numRows * numCols];
-        final double[][] expected = new double[numRows][2 * numCols];
+        final float[] actual = new float[numRows * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
         final boolean[] checked = new boolean[numRows * numCols];
         Arrays.fill(checked, false);
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
+                final float rnd = random.nextFloat();
                 actual[r * numCols + c] = rnd;
                 expected[r][2 * c] = rnd;
-                expected[r][2 * c + 1] = 0d;
+                expected[r][2 * c + 1] = 0f;
             }
         }
         fft.realForward(actual);
         complexForward(expected);
         int index;
-        double exp, act;
+        float exp, act;
         for (int r = 1; r < numRows; r++) {
             for (int c = 2; c < numCols; c++) {
                 exp = expected[r][c];
@@ -438,35 +473,38 @@ public class DoubleFFT_2DTest {
         }
     }
 
-    /** A test of {@link DoubleFFT_2D#realForward(double[][])}. */
+    /** A test of {@link FloatFFT_2D#realForward(float[][])}. */
     @Test
-    public void testRealForward2dInput() {
+    public void testRealForward2fInput() {
         if (!ConcurrencyUtils.isPowerOf2(numRows)) {
             return;
         }
         if (!ConcurrencyUtils.isPowerOf2(numCols)) {
             return;
         }
-        double rel = 1E-8;
-        double x0 = 5E-8;
-        final double abs = rel * x0;
+        float rel = 5E-3f;
+        float x0 = 1E-2f;
+        if ((numRows == 1024) || (numCols == 1024)) {
+            rel = 1E-2f;
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[][] actual = new double[numRows][numCols];
-        final double[][] expected = new double[numRows][2 * numCols];
+        final float[][] actual = new float[numRows][numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
         final boolean[][] checked = new boolean[numRows][numCols];
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
+                final float rnd = random.nextFloat();
                 actual[r][c] = rnd;
                 expected[r][2 * c] = rnd;
-                expected[r][2 * c + 1] = 0.0;
+                expected[r][2 * c + 1] = 0f;
                 checked[r][c] = false;
             }
         }
         fft.realForward(actual);
         complexForward(expected);
-        double exp, act;
+        float exp, act;
 
         for (int r = 1; r < numRows; r++) {
             for (int c = 2; c < numCols; c++) {
@@ -534,268 +572,326 @@ public class DoubleFFT_2DTest {
         }
     }
 
-    /** A test of {@link DoubleFFT_2D#realForwardFull(double[])}. */
+    /** A test of {@link FloatFFT_2D#realForwardFull(float[])}. */
     @Test
-    public void testRealForwardFull1dInput() {
-        double rel = 1E-7;
-        double x0 = 5E-6;
-        if (numCols == 511) {
-            x0 = 5E-5;
+    public void testRealForwardFull1fInput() {
+        float rel = 2E-5f;
+        float x0 = 5E-3f;
+        if ((numRows == 100) || (numCols == 100)) {
+            rel = Math.max(rel, 5E-3f);
         }
-        final double abs = rel * x0;
+        if ((numRows == 310) || (numCols == 310)) {
+            x0 = Math.max(x0, 5E-2f);
+            rel = Math.max(rel, 1E-2f);
+        }
+        if ((numRows == 511) || (numCols == 511)) {
+            x0 = Math.max(x0, 5E-2f);
+            rel = Math.max(rel, 2E-2f);
+        }
+        if ((numRows == 512) || (numCols == 512)) {
+            x0 = Math.max(x0, 1E-2f);
+            rel = Math.max(rel, 2E-2f);
+        }
+        if ((numRows == 1024) || (numCols == 1024)) {
+            x0 = Math.max(x0, 1E-2f);
+            rel = Math.max(rel, 2E-2f);
+        }
+        if ((numRows == 1024) && ((numCols == 310) || (numCols == 511))) {
+            rel = Math.max(rel, 4E-2f);
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[] actual = new double[2 * numRows * numCols];
-        final double[][] expected = new double[numRows][2 * numCols];
+        final float[] actual = new float[2 * numRows * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
+                final float rnd = random.nextFloat();
                 actual[r * numCols + c] = rnd;
                 expected[r][2 * c] = rnd;
-                expected[r][2 * c + 1] = 0d;
+                expected[r][2 * c + 1] = 0f;
             }
         }
         fft.realForwardFull(actual);
         complexForward(expected);
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double exp = expected[r][c];
+                final float exp = expected[r][c];
                 final int index = 2 * r * numCols + c;
-                final double act = actual[index];
+                final float act = actual[index];
                 checker.assertEquals("[" + index + "]", exp, act);
             }
         }
     }
 
-    /** A test of {@link DoubleFFT_2D#realForwardFull(double[][])}. */
+    /** A test of {@link FloatFFT_2D#realForwardFull(float[][])}. */
     @Test
-    public void testRealForwardFull2dInput() {
-        double rel = 1E-7;
-        double x0 = 5E-6;
-        if (numCols == 511) {
-            x0 = 5E-5;
+    public void testRealForwardFull2fInput() {
+        float rel = 2E-5f;
+        float x0 = 5E-3f;
+        if ((numRows == 100) || (numCols == 100)) {
+            rel = Math.max(rel, 5E-3f);
         }
-        final double abs = rel * x0;
+        if ((numRows == 310) || (numCols == 310)) {
+            x0 = Math.max(x0, 5E-2f);
+            rel = Math.max(rel, 1E-2f);
+        }
+        if ((numRows == 511) || (numCols == 511)) {
+            x0 = Math.max(x0, 5E-2f);
+            rel = Math.max(rel, 2E-2f);
+        }
+        if ((numRows == 512) || (numCols == 512)) {
+            x0 = Math.max(x0, 1E-2f);
+            rel = Math.max(rel, 2E-2f);
+        }
+        if ((numRows == 1024) || (numCols == 1024)) {
+            x0 = Math.max(x0, 1E-2f);
+            rel = Math.max(rel, 2E-2f);
+        }
+        if ((numRows == 1024) && ((numCols == 310) || (numCols == 511))) {
+            rel = Math.max(rel, 4E-2f);
+        }
+        final float abs = rel * x0;
         final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
                 abs);
-        final double[][] actual = new double[numRows][2 * numCols];
-        final double[][] expected = new double[numRows][2 * numCols];
+        final float[][] actual = new float[numRows][2 * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
+                final float rnd = random.nextFloat();
                 actual[r][c] = rnd;
                 expected[r][2 * c] = rnd;
-                expected[r][2 * c + 1] = 0d;
+                expected[r][2 * c + 1] = 0f;
             }
         }
         fft.realForwardFull(actual);
         complexForward(expected);
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < 2 * numCols; c++) {
-                final double exp = expected[r][c];
-                final double act = actual[r][c];
+                final float exp = expected[r][c];
+                final float act = actual[r][c];
                 checker.assertEquals("[" + r + "][" + c + "]", exp, act);
             }
         }
     }
 
     /**
-     * A test of {@link DoubleFFT_2D#realInverseFull(double[], boolean)}, with
-     * the second parameter set to <code>true</code>.
-     */
-    @Test
-    public void testRealInverseFullScaled1dInput() {
-        final double rel = 1E-14;
-        final double abs = 1E-15;
-        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
-                abs);
-        final double[] actual = new double[2 * numRows * numCols];
-        final double[] expected = new double[2 * numRows * numCols];
-        for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
-                final int index = r * numCols + c;
-                actual[index] = rnd;
-                expected[2 * index] = rnd;
-                expected[2 * index + 1] = 0d;
-            }
-        }
-        // TODO If the two following lines are permuted, this causes an array
-        // index out of bounds exception.
-        fft.complexInverse(expected, true);
-        fft.realInverseFull(actual, true);
-        for (int i = 0; i < actual.length; i++) {
-            final double exp = expected[i];
-            final double act = actual[i];
-            checker.assertEquals("[" + i + "]", exp, act);
-        }
-    }
-
-    /**
-     * A test of {@link DoubleFFT_2D#realInverseFull(double[][], boolean)}, with
-     * the second parameter set to <code>true</code>.
-     */
-    @Test
-    public void testRealInverseFullScaled2dInput() {
-        final double rel = 1E-14;
-        final double abs = 1E-15;
-        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
-                abs);
-        final double[][] actual = new double[numRows][2 * numCols];
-        final double[][] expected = new double[numRows][2 * numCols];
-        for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
-                actual[r][c] = rnd;
-                expected[r][2 * c] = rnd;
-                expected[r][2 * c + 1] = 0d;
-            }
-        }
-        fft.realInverseFull(actual, true);
-        fft.complexInverse(expected, true);
-
-        for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < 2 * numCols; c++) {
-                final double exp = expected[r][c];
-                final double act = actual[r][c];
-                checker.assertEquals("[" + r + "][" + c + "]", exp, act);
-            }
-        }
-    }
-
-    /**
-     * A test of {@link DoubleFFT_2D#realInverseFull(double[], boolean)}, with
-     * the second parameter set to <code>false</code>.
-     */
-    @Test
-    public void testRealInverseFullUnscaled1dInput() {
-        double rel = 1E-7;
-        double x0 = 5E-7;
-        if ((numRows == 310) || (numCols == 310)) {
-            x0 = 1E-6;
-        }
-        if ((numRows == 511) || (numCols == 511)) {
-            x0 = 5E-5;
-        }
-        final double abs = rel * x0;
-        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
-                abs);
-        final double[] actual = new double[2 * numRows * numCols];
-        final double[] expected = new double[2 * numRows * numCols];
-        for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
-                final int index = r * numCols + c;
-                actual[index] = rnd;
-                expected[2 * index] = rnd;
-                expected[2 * index + 1] = 0d;
-            }
-        }
-        // TODO If the two following lines are permuted, this causes an array
-        // index out of bounds exception.
-        fft.complexInverse(expected, false);
-        fft.realInverseFull(actual, false);
-        for (int i = 0; i < actual.length; i++) {
-            final double exp = expected[i];
-            final double act = actual[i];
-            checker.assertEquals("[" + i + "]", exp, act);
-        }
-    }
-
-    /**
-     * A test of {@link DoubleFFT_2D#realInverseFull(double[][], boolean)}, with
-     * the second parameter set to <code>false</code>.
-     */
-    @Test
-    public void testRealInverseFullUnscaled2dInput() {
-        double rel = 1E-7;
-        double x0 = 5E-7;
-        if ((numRows == 310) || (numCols == 310)) {
-            x0 = 1E-6;
-        }
-        if ((numRows == 511) || (numCols == 511)) {
-            x0 = 5E-5;
-        }
-        final double abs = rel * x0;
-        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
-                abs);
-        final double[][] actual = new double[numRows][2 * numCols];
-        final double[][] expected = new double[numRows][2 * numCols];
-        for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
-                actual[r][c] = rnd;
-                expected[r][2 * c] = rnd;
-                expected[r][2 * c + 1] = 0d;
-            }
-        }
-        fft.realInverseFull(actual, false);
-        fft.complexInverse(expected, false);
-
-        for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < 2 * numCols; c++) {
-                final double exp = expected[r][c];
-                final double act = actual[r][c];
-                checker.assertEquals("[" + r + "][" + c + "]", exp, act);
-            }
-        }
-    }
-
-    /**
-     * A test of {@link DoubleFFT_2D#realInverse(double[], boolean)}, with the
+     * A test of {@link FloatFFT_2D#realInverseFull(float[], boolean)}, with the
      * second parameter set to <code>true</code>.
      */
     @Test
-    public void testRealInverseScaled1dInput() {
+    public void testRealInverseFullScaled1fInput() {
+        final float rel = 1E-7f;
+        final float abs = 1E-7f;
+        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
+                abs);
+        final float[] actual = new float[2 * numRows * numCols];
+        final float[] expected = new float[2 * numRows * numCols];
+        for (int r = 0; r < numRows; r++) {
+            for (int c = 0; c < numCols; c++) {
+                final float rnd = random.nextFloat();
+                final int index = r * numCols + c;
+                actual[index] = rnd;
+                expected[2 * index] = rnd;
+                expected[2 * index + 1] = 0f;
+            }
+        }
+        fft.complexInverse(expected, true);
+        fft.realInverseFull(actual, true);
+        for (int i = 0; i < actual.length; i++) {
+            final float exp = expected[i];
+            final float act = actual[i];
+            checker.assertEquals("[" + i + "]", exp, act);
+        }
+    }
+
+    /**
+     * A test of {@link FloatFFT_2D#realInverseFull(float[][], boolean)}, with
+     * the second parameter set to <code>true</code>.
+     */
+    @Test
+    public void testRealInverseFullScaled2fInput() {
+        final float rel = 1E-7f;
+        final float abs = 1E-7f;
+        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
+                abs);
+        final float[][] actual = new float[numRows][2 * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
+        for (int r = 0; r < numRows; r++) {
+            for (int c = 0; c < numCols; c++) {
+                final float rnd = random.nextFloat();
+                actual[r][c] = rnd;
+                expected[r][2 * c] = rnd;
+                expected[r][2 * c + 1] = 0f;
+            }
+        }
+        fft.realInverseFull(actual, true);
+        fft.complexInverse(expected, true);
+
+        for (int r = 0; r < numRows; r++) {
+            for (int c = 0; c < 2 * numCols; c++) {
+                final float exp = expected[r][c];
+                final float act = actual[r][c];
+                checker.assertEquals("[" + r + "][" + c + "]", exp, act);
+            }
+        }
+    }
+
+    /**
+     * A test of {@link FloatFFT_2D#realInverseFull(float[], boolean)}, with the
+     * second parameter set to <code>false</code>.
+     */
+    @Test
+    public void testRealInverseFullUnscaled1fInput() {
+        float rel = 2E-5f;
+        float x0 = 5E-7f;
+        if (((numRows == 310) && (numCols == 1024))
+                || ((numRows == 1024) && (numCols == 310))) {
+            rel = 0.1f;
+            x0 = 2E-3f;
+        }
+        if ((numRows == 511) && (numCols == 1024)) {
+            rel = 1E-3f;
+            x0 = 5E-2f;
+        }
+        if ((numRows == 1024) && (numCols == 511)) {
+            rel = 5E-1f;
+            x0 = 5E-2f;
+        }
+        if ((numRows == 1024) || (numCols == 1024)) {
+            rel = Math.max(rel, 1E-2f);
+            x0 = Math.max(x0, 2E-2f);
+        }
+        final float abs = rel * x0;
+        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
+                abs);
+        final float[] actual = new float[2 * numRows * numCols];
+        final float[] expected = new float[2 * numRows * numCols];
+        for (int r = 0; r < numRows; r++) {
+            for (int c = 0; c < numCols; c++) {
+                final float rnd = random.nextFloat();
+                final int index = r * numCols + c;
+                actual[index] = rnd;
+                expected[2 * index] = rnd;
+                expected[2 * index + 1] = 0f;
+            }
+        }
+        // TODO If the two following lines are permuted, this causes an array
+        // index out of bounds exception.
+        fft.complexInverse(expected, false);
+        fft.realInverseFull(actual, false);
+        for (int i = 0; i < actual.length; i++) {
+            final float exp = expected[i];
+            final float act = actual[i];
+            checker.assertEquals("[" + i + "]", exp, act);
+        }
+    }
+
+    /**
+     * A test of {@link FloatFFT_2D#realInverseFull(float[][], boolean)}, with
+     * the second parameter set to <code>false</code>.
+     */
+    @Test
+    public void testRealInverseFullUnscaled2fInput() {
+        float rel = 2E-5f;
+        float x0 = 5E-7f;
+        if (((numRows == 310) && (numCols == 1024))
+                || ((numRows == 1024) && (numCols == 310))) {
+            rel = 0.1f;
+            x0 = 2E-3f;
+        }
+        if ((numRows == 511) && (numCols == 1024)) {
+            rel = 1E-3f;
+            x0 = 5E-2f;
+        }
+        if ((numRows == 1024) && (numCols == 511)) {
+            rel = 5E-1f;
+            x0 = 5E-2f;
+        }
+        if ((numRows == 1024) || (numCols == 1024)) {
+            rel = Math.max(rel, 1E-2f);
+            x0 = Math.max(x0, 2E-2f);
+        }
+        final float abs = rel * x0;
+        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
+                abs);
+        final float[][] actual = new float[numRows][2 * numCols];
+        final float[][] expected = new float[numRows][2 * numCols];
+        for (int r = 0; r < numRows; r++) {
+            for (int c = 0; c < numCols; c++) {
+                final float rnd = random.nextFloat();
+                actual[r][c] = rnd;
+                expected[r][2 * c] = rnd;
+                expected[r][2 * c + 1] = 0f;
+            }
+        }
+        fft.realInverseFull(actual, false);
+        fft.complexInverse(expected, false);
+
+        for (int r = 0; r < numRows; r++) {
+            for (int c = 0; c < 2 * numCols; c++) {
+                final float exp = expected[r][c];
+                final float act = actual[r][c];
+                checker.assertEquals("[" + r + "][" + c + "]", exp, act);
+            }
+        }
+    }
+
+    /**
+     * A test of {@link FloatFFT_2D#realInverse(float[], boolean)}, with the
+     * second parameter set to <code>true</code>.
+     */
+    @Test
+    public void testRealInverseScaled1fInput() {
+        float rel = 5E-4f;
+        float x0 = 5E-3f;
+        final float abs = rel * x0;
+        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
+                abs);
         if (!ConcurrencyUtils.isPowerOf2(numRows)) {
             return;
         }
         if (!ConcurrencyUtils.isPowerOf2(numCols)) {
             return;
         }
-        double rel = 1E-9;
-        double x0 = 1E-14;
-        final double abs = rel * x0;
-        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
-                abs);
-        final double[] actual = new double[numRows * numCols];
-        final double[] expected = new double[actual.length];
+        final float[] actual = new float[numRows * numCols];
+        final float[] expected = new float[actual.length];
         for (int i = 0; i < actual.length; i++) {
-            final double rnd = random.nextDouble();
+            final float rnd = random.nextFloat();
             actual[i] = rnd;
             expected[i] = rnd;
         }
         fft.realForward(actual);
         fft.realInverse(actual, true);
         for (int i = 0; i < actual.length; i++) {
-            final double exp = expected[i];
-            final double act = actual[i];
+            final float exp = expected[i];
+            final float act = actual[i];
             checker.assertEquals("[" + i + "]", exp, act);
         }
     }
 
     /**
-     * A test of {@link DoubleFFT_2D#realInverse(double[][], boolean)}, with the
+     * A test of {@link FloatFFT_2D#realInverse(float[][], boolean)}, with the
      * second parameter set to <code>true</code>.
      */
     @Test
-    public void testRealInverseScaled2dInput() {
+    public void testRealInverseScaled2fInput() {
+        float rel = 5E-4f;
+        float x0 = 5E-3f;
+        final float abs = rel * x0;
+        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
+                abs);
         if (!ConcurrencyUtils.isPowerOf2(numRows)) {
             return;
         }
         if (!ConcurrencyUtils.isPowerOf2(numCols)) {
             return;
         }
-        double rel = 1E-9;
-        double x0 = 1E-14;
-        final double abs = rel * x0;
-        final FloatingPointEqualityChecker checker = createEqualityChecker(rel,
-                abs);
-        final double[][] actual = new double[numRows][numCols];
-        final double[][] expected = new double[numRows][numCols];
+        final float[][] actual = new float[numRows][numCols];
+        final float[][] expected = new float[numRows][numCols];
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < numCols; c++) {
-                final double rnd = random.nextDouble();
+                final float rnd = random.nextFloat();
                 actual[r][c] = rnd;
                 expected[r][c] = rnd;
             }
@@ -804,8 +900,8 @@ public class DoubleFFT_2DTest {
         fft.realInverse(actual, true);
         for (int r = 0; r < numRows; r++) {
             for (int c = 0; c < numCols; c++) {
-                final double exp = expected[r][c];
-                final double act = actual[r][c];
+                final float exp = expected[r][c];
+                final float act = actual[r][c];
                 checker.assertEquals("[" + r + "][" + c + "]", exp, act);
             }
         }
