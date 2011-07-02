@@ -55,8 +55,8 @@ package edu.emory.mathcs.jtransforms.fft;
  *   double[] data = new double[2 * rows * columns];
  *   ...
  *   fft.realForwardFull(data);
- *   data[r1 * columns + c1] = val1;
- *   val2 = data[r2 * columns + c2];
+ *   data[r1 * 2 * columns + c1] = val1;
+ *   val2 = data[r2 * 2 * columns + c2];
  * </pre>
  * is equivalent to
  * <pre>
@@ -109,14 +109,14 @@ public class RealFFTUtils_2D {
     /** The constant <code>int</code> value of 0. */
     private static final int ZERO = 0;
 
-    /** The size of the data in the first direction. */
+    /** The size of the data in the second direction. */
     private final int columns;
 
-    /** The size of the data in the second direction. */
+    /** The size of the data in the first direction. */
     private final int rows;
 
     /**
-     * Creates a new instance of this class. The size of the underlyind
+     * Creates a new instance of this class. The size of the underlying
      * {@link DoubleFFT_2D} or {@link FloatFFT_2D} must be specified.
      * 
      * @param rows
@@ -133,7 +133,7 @@ public class RealFFTUtils_2D {
      * <p>
      * Returns the 1d index of the specified 2d Fourier mode. In other words, if
      * <code>packed</code> contains the transformed data following a call to
-     * {@link DoubleFFT_2D#realForwardFull(double[])} or
+     * {@link DoubleFFT_2D#realForward(double[])} or
      * {@link FloatFFT_2D#realForward(float[])}, then the returned value
      * <code>index</code> gives access to the <code>[r][c]</code> Fourier mode
      * <ul>
@@ -159,7 +159,7 @@ public class RealFFTUtils_2D {
             if (c <= ONE) {
                 if (rmul2 == rows) {
                     if (cmod2 == ONE) {
-                        return -Integer.MIN_VALUE;
+                        return Integer.MIN_VALUE;
                     }
                     return ((rows * columns) >> ONE);
                 } else if (rmul2 < rows) {
@@ -214,7 +214,7 @@ public class RealFFTUtils_2D {
 
     /**
      * Sets the specified Fourier mode of the transformed data. The data array
-     * results from a call to {@link DoubleFFT_2D#realForwardFull(double[])}.
+     * results from a call to {@link DoubleFFT_2D#realForward(double[])}.
      * 
      * @param val
      *            the new value of the <code>[r][c]</code> Fourier mode
@@ -244,7 +244,7 @@ public class RealFFTUtils_2D {
 
     /**
      * Sets the specified Fourier mode of the transformed data. The data array
-     * results from a call to {@link DoubleFFT_2D#realForwardFull(double[][])}.
+     * results from a call to {@link DoubleFFT_2D#realForward(double[][])}.
      * 
      * @param val
      *            the new value of the <code>[r][c]</code> Fourier mode
@@ -272,7 +272,7 @@ public class RealFFTUtils_2D {
 
     /**
      * Sets the specified Fourier mode of the transformed data. The data array
-     * results from a call to {@link FloatFFT_2D#realForwardFull(float[])}.
+     * results from a call to {@link FloatFFT_2D#realForward(float[])}.
      * 
      * @param val
      *            the new value of the <code>[r][c]</code> Fourier mode
@@ -302,7 +302,7 @@ public class RealFFTUtils_2D {
 
     /**
      * Sets the specified Fourier mode of the transformed data. The data array
-     * results from a call to {@link FloatFFT_2D#realForwardFull(float[][])}.
+     * results from a call to {@link FloatFFT_2D#realForward(float[][])}.
      * 
      * @param val
      *            the new value of the <code>[r][c]</code> Fourier mode
@@ -330,8 +330,7 @@ public class RealFFTUtils_2D {
 
     /**
      * Returns the specified Fourier mode of the transformed data. The data
-     * array results from a call to
-     * {@link DoubleFFT_2D#realForwardFull(double[])}.
+     * array results from a call to {@link DoubleFFT_2D#realForward(double[])}.
      * 
      * @param r
      *            the row index
@@ -381,7 +380,7 @@ public class RealFFTUtils_2D {
 
     /**
      * Returns the specified Fourier mode of the transformed data. The data
-     * array results from a call to {@link FloatFFT_2D#realForwardFull(float[])}
+     * array results from a call to {@link FloatFFT_2D#realForward(float[])}
      * .
      * 
      * @param r
