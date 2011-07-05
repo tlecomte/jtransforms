@@ -62,7 +62,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 @RunWith(value = Parameterized.class)
 public class FloatFFT_1DTest {
     /** Base message of all exceptions. */
-    public static final String DEFAULT_MESSAGE = "FFT of size %d: ";
+    public static final String DEFAULT_MESSAGE = "%d-threaded FFT of size %d: ";
 
     /** Name of binary files (input, untransformed data). */
     private final static String FFTW_INPUT_PATTERN = "fftw%d.in";
@@ -118,7 +118,8 @@ public class FloatFFT_1DTest {
 
     public FloatingPointEqualityChecker createEqualityChecker(final float rel,
             final float abs) {
-        final String msg = String.format(DEFAULT_MESSAGE, n);
+        final String msg = String.format(DEFAULT_MESSAGE,
+                ConcurrencyUtils.getNumberOfThreads(), n);
         return new FloatingPointEqualityChecker(msg, 0d, 0d, rel, abs);
     }
 

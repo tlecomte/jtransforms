@@ -72,7 +72,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 @RunWith(value = Parameterized.class)
 public class DoubleFFT_2DTest {
     /** Base message of all exceptions. */
-    public static final String DEFAULT_MESSAGE = "FFT of size %dx%d: ";
+    public static final String DEFAULT_MESSAGE = "%d-threaded FFT of size %dx%d: ";
 
     /** The constant value of the seed of the random generator. */
     public static final int SEED = 20110602;
@@ -86,8 +86,6 @@ public class DoubleFFT_2DTest {
 
         for (int i = 0; i < size.length; i++) {
             for (int j = 0; j < size.length; j++) {
-                final String msg = String.format(DEFAULT_MESSAGE, size[i],
-                        size[j]);
                 parameters.add(new Object[] { size[i], size[j], 1, SEED });
                 parameters.add(new Object[] { size[i], size[j], 4, SEED });
             }
@@ -134,6 +132,7 @@ public class DoubleFFT_2DTest {
         this.fft = new DoubleFFT_2D(numRows, numColumns);
         this.random = new Random(seed);
         ConcurrencyUtils.setNumberOfThreads(numThreads);
+        ConcurrencyUtils.setThreadsBeginN_2D(4);
     }
 
     /**
@@ -162,7 +161,8 @@ public class DoubleFFT_2DTest {
 
     public FloatingPointEqualityChecker createEqualityChecker(final double rel,
             final double abs) {
-        final String msg = String.format(DEFAULT_MESSAGE, numRows, numCols);
+        final String msg = String.format(DEFAULT_MESSAGE,
+                ConcurrencyUtils.getNumberOfThreads(), numRows, numCols);
         return new FloatingPointEqualityChecker(msg, rel, abs, 0f, 0f);
     }
 
