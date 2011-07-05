@@ -46,9 +46,9 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <br>
  * Part of the code is derived from General Purpose FFT Package written by Takuya Ooura
  * (http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html)
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
+ *
  */
 public strictfp class FloatFFT_3D {
 
@@ -76,14 +76,14 @@ public strictfp class FloatFFT_3D {
 
     /**
      * Creates new instance of FloatFFT_3D.
-     * 
+     *
      * @param slices
      *            number of slices
      * @param rows
      *            number of rows
      * @param columns
      *            number of columns
-     * 
+     *
      */
     public FloatFFT_3D(int slices, int rows, int columns) {
         if (slices <= 1 || rows <= 1 || columns <= 1) {
@@ -140,12 +140,12 @@ public strictfp class FloatFFT_3D {
      * Complex number is stored as two float values in sequence: the real and
      * imaginary part, i.e. the input array must be of size slices*rows*2*columns. The
      * physical layout of the input data is as follows:
-     * 
+     *
      * <pre>
-     * a[k1*sliceStride + k2*rowStride + 2*k3] = Re[k1][k2][k3], 
+     * a[k1*sliceStride + k2*rowStride + 2*k3] = Re[k1][k2][k3],
      * a[k1*sliceStride + k2*rowStride + 2*k3+1] = Im[k1][k2][k3], 0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;=k3&lt;columns,
      * </pre>
-     * 
+     *
      * @param a
      *            data to transform
      */
@@ -331,12 +331,12 @@ public strictfp class FloatFFT_3D {
      * represented by 2 float values in sequence: the real and imaginary part,
      * i.e. the input array must be of size slices by rows by 2*columns. The physical
      * layout of the input data is as follows:
-     * 
+     *
      * <pre>
-     * a[k1][k2][2*k3] = Re[k1][k2][k3], 
+     * a[k1][k2][2*k3] = Re[k1][k2][k3],
      * a[k1][k2][2*k3+1] = Im[k1][k2][k3], 0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;=k3&lt;columns,
      * </pre>
-     * 
+     *
      * @param a
      *            data to transform
      */
@@ -507,12 +507,12 @@ public strictfp class FloatFFT_3D {
      * rowStride = 2 * columns. Complex number is stored as two float values in
      * sequence: the real and imaginary part, i.e. the input array must be of
      * size slices*rows*2*columns. The physical layout of the input data is as follows:
-     * 
+     *
      * <pre>
-     * a[k1*sliceStride + k2*rowStride + 2*k3] = Re[k1][k2][k3], 
+     * a[k1*sliceStride + k2*rowStride + 2*k3] = Re[k1][k2][k3],
      * a[k1*sliceStride + k2*rowStride + 2*k3+1] = Im[k1][k2][k3], 0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;=k3&lt;columns,
      * </pre>
-     * 
+     *
      * @param a
      *            data to transform
      * @param scale
@@ -699,12 +699,12 @@ public strictfp class FloatFFT_3D {
      * represented by 2 float values in sequence: the real and imaginary part,
      * i.e. the input array must be of size slices by rows by 2*columns. The physical
      * layout of the input data is as follows:
-     * 
+     *
      * <pre>
-     * a[k1][k2][2*k3] = Re[k1][k2][k3], 
+     * a[k1][k2][2*k3] = Re[k1][k2][k3],
      * a[k1][k2][2*k3+1] = Im[k1][k2][k3], 0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;=k3&lt;columns,
      * </pre>
-     * 
+     *
      * @param a
      *            data to transform
      * @param scale
@@ -873,55 +873,55 @@ public strictfp class FloatFFT_3D {
      * i.e. element (i,j,k) of 3-d array x[slices][rows][2*columns] is stored in
      * a[i*sliceStride + j*rowStride + k], where sliceStride = rows * 2 * columns and
      * rowStride = 2 * columns. The physical layout of the output data is as follows:
-     * 
+     *
      * <pre>
      * a[k1*sliceStride + k2*rowStride + 2*k3] = Re[k1][k2][k3]
-     *                 = Re[(slices-k1)%slices][(rows-k2)%rows][columns-k3], 
+     *                 = Re[(slices-k1)%slices][(rows-k2)%rows][columns-k3],
      * a[k1*sliceStride + k2*rowStride + 2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(slices-k1)%slices][(rows-k2)%rows][columns-k3], 
-     *     0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;k3&lt;columns/2, 
+     *                   = -Im[(slices-k1)%slices][(rows-k2)%rows][columns-k3],
+     *     0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;k3&lt;columns/2,
      * a[k1*sliceStride + k2*rowStride] = Re[k1][k2][0]
-     *              = Re[(slices-k1)%slices][rows-k2][0], 
+     *              = Re[(slices-k1)%slices][rows-k2][0],
      * a[k1*sliceStride + k2*rowStride + 1] = Im[k1][k2][0]
-     *              = -Im[(slices-k1)%slices][rows-k2][0], 
+     *              = -Im[(slices-k1)%slices][rows-k2][0],
      * a[k1*sliceStride + (rows-k2)*rowStride + 1] = Re[(slices-k1)%slices][k2][columns/2]
-     *                 = Re[k1][rows-k2][columns/2], 
+     *                 = Re[k1][rows-k2][columns/2],
      * a[k1*sliceStride + (rows-k2)*rowStride] = -Im[(slices-k1)%slices][k2][columns/2]
-     *                 = Im[k1][rows-k2][columns/2], 
-     *     0&lt;=k1&lt;slices, 0&lt;k2&lt;rows/2, 
+     *                 = Im[k1][rows-k2][columns/2],
+     *     0&lt;=k1&lt;slices, 0&lt;k2&lt;rows/2,
      * a[k1*sliceStride] = Re[k1][0][0]
-     *             = Re[slices-k1][0][0], 
+     *             = Re[slices-k1][0][0],
      * a[k1*sliceStride + 1] = Im[k1][0][0]
-     *             = -Im[slices-k1][0][0], 
+     *             = -Im[slices-k1][0][0],
      * a[k1*sliceStride + (rows/2)*rowStride] = Re[k1][rows/2][0]
-     *                = Re[slices-k1][rows/2][0], 
+     *                = Re[slices-k1][rows/2][0],
      * a[k1*sliceStride + (rows/2)*rowStride + 1] = Im[k1][rows/2][0]
-     *                = -Im[slices-k1][rows/2][0], 
+     *                = -Im[slices-k1][rows/2][0],
      * a[(slices-k1)*sliceStride + 1] = Re[k1][0][columns/2]
-     *                = Re[slices-k1][0][columns/2], 
+     *                = Re[slices-k1][0][columns/2],
      * a[(slices-k1)*sliceStride] = -Im[k1][0][columns/2]
-     *                = Im[slices-k1][0][columns/2], 
+     *                = Im[slices-k1][0][columns/2],
      * a[(slices-k1)*sliceStride + (rows/2)*rowStride + 1] = Re[k1][rows/2][columns/2]
-     *                   = Re[slices-k1][rows/2][columns/2], 
+     *                   = Re[slices-k1][rows/2][columns/2],
      * a[(slices-k1)*sliceStride + (rows/2) * rowStride] = -Im[k1][rows/2][columns/2]
-     *                   = Im[slices-k1][rows/2][columns/2], 
-     *     0&lt;k1&lt;slices/2, 
-     * a[0] = Re[0][0][0], 
-     * a[1] = Re[0][0][columns/2], 
-     * a[(rows/2)*rowStride] = Re[0][rows/2][0], 
-     * a[(rows/2)*rowStride + 1] = Re[0][rows/2][columns/2], 
-     * a[(slices/2)*sliceStride] = Re[slices/2][0][0], 
-     * a[(slices/2)*sliceStride + 1] = Re[slices/2][0][columns/2], 
-     * a[(slices/2)*sliceStride + (rows/2)*rowStride] = Re[slices/2][rows/2][0], 
+     *                   = Im[slices-k1][rows/2][columns/2],
+     *     0&lt;k1&lt;slices/2,
+     * a[0] = Re[0][0][0],
+     * a[1] = Re[0][0][columns/2],
+     * a[(rows/2)*rowStride] = Re[0][rows/2][0],
+     * a[(rows/2)*rowStride + 1] = Re[0][rows/2][columns/2],
+     * a[(slices/2)*sliceStride] = Re[slices/2][0][0],
+     * a[(slices/2)*sliceStride + 1] = Re[slices/2][0][columns/2],
+     * a[(slices/2)*sliceStride + (rows/2)*rowStride] = Re[slices/2][rows/2][0],
      * a[(slices/2)*sliceStride + (rows/2)*rowStride + 1] = Re[slices/2][rows/2][columns/2]
      * </pre>
-     * 
-     * 
+     *
+     *
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>realForwardFull</code>. To get back the
      * original data, use <code>realInverse</code> on the output of this method.
-     * 
+     *
      * @param a
      *            data to transform
      */
@@ -964,55 +964,55 @@ public strictfp class FloatFFT_3D {
      * . This method only works when the sizes of all three dimensions are
      * power-of-two numbers. The data is stored in a 3D array. The physical
      * layout of the output data is as follows:
-     * 
+     *
      * <pre>
      * a[k1][k2][2*k3] = Re[k1][k2][k3]
-     *                 = Re[(slices-k1)%slices][(rows-k2)%rows][columns-k3], 
+     *                 = Re[(slices-k1)%slices][(rows-k2)%rows][columns-k3],
      * a[k1][k2][2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(slices-k1)%slices][(rows-k2)%rows][columns-k3], 
-     *     0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;k3&lt;columns/2, 
+     *                   = -Im[(slices-k1)%slices][(rows-k2)%rows][columns-k3],
+     *     0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;k3&lt;columns/2,
      * a[k1][k2][0] = Re[k1][k2][0]
-     *              = Re[(slices-k1)%slices][rows-k2][0], 
+     *              = Re[(slices-k1)%slices][rows-k2][0],
      * a[k1][k2][1] = Im[k1][k2][0]
-     *              = -Im[(slices-k1)%slices][rows-k2][0], 
+     *              = -Im[(slices-k1)%slices][rows-k2][0],
      * a[k1][rows-k2][1] = Re[(slices-k1)%slices][k2][columns/2]
-     *                 = Re[k1][rows-k2][columns/2], 
+     *                 = Re[k1][rows-k2][columns/2],
      * a[k1][rows-k2][0] = -Im[(slices-k1)%slices][k2][columns/2]
-     *                 = Im[k1][rows-k2][columns/2], 
-     *     0&lt;=k1&lt;slices, 0&lt;k2&lt;rows/2, 
+     *                 = Im[k1][rows-k2][columns/2],
+     *     0&lt;=k1&lt;slices, 0&lt;k2&lt;rows/2,
      * a[k1][0][0] = Re[k1][0][0]
-     *             = Re[slices-k1][0][0], 
+     *             = Re[slices-k1][0][0],
      * a[k1][0][1] = Im[k1][0][0]
-     *             = -Im[slices-k1][0][0], 
+     *             = -Im[slices-k1][0][0],
      * a[k1][rows/2][0] = Re[k1][rows/2][0]
-     *                = Re[slices-k1][rows/2][0], 
+     *                = Re[slices-k1][rows/2][0],
      * a[k1][rows/2][1] = Im[k1][rows/2][0]
-     *                = -Im[slices-k1][rows/2][0], 
+     *                = -Im[slices-k1][rows/2][0],
      * a[slices-k1][0][1] = Re[k1][0][columns/2]
-     *                = Re[slices-k1][0][columns/2], 
+     *                = Re[slices-k1][0][columns/2],
      * a[slices-k1][0][0] = -Im[k1][0][columns/2]
-     *                = Im[slices-k1][0][columns/2], 
+     *                = Im[slices-k1][0][columns/2],
      * a[slices-k1][rows/2][1] = Re[k1][rows/2][columns/2]
-     *                   = Re[slices-k1][rows/2][columns/2], 
+     *                   = Re[slices-k1][rows/2][columns/2],
      * a[slices-k1][rows/2][0] = -Im[k1][rows/2][columns/2]
-     *                   = Im[slices-k1][rows/2][columns/2], 
-     *     0&lt;k1&lt;slices/2, 
-     * a[0][0][0] = Re[0][0][0], 
-     * a[0][0][1] = Re[0][0][columns/2], 
-     * a[0][rows/2][0] = Re[0][rows/2][0], 
-     * a[0][rows/2][1] = Re[0][rows/2][columns/2], 
-     * a[slices/2][0][0] = Re[slices/2][0][0], 
-     * a[slices/2][0][1] = Re[slices/2][0][columns/2], 
-     * a[slices/2][rows/2][0] = Re[slices/2][rows/2][0], 
+     *                   = Im[slices-k1][rows/2][columns/2],
+     *     0&lt;k1&lt;slices/2,
+     * a[0][0][0] = Re[0][0][0],
+     * a[0][0][1] = Re[0][0][columns/2],
+     * a[0][rows/2][0] = Re[0][rows/2][0],
+     * a[0][rows/2][1] = Re[0][rows/2][columns/2],
+     * a[slices/2][0][0] = Re[slices/2][0][0],
+     * a[slices/2][0][1] = Re[slices/2][0][columns/2],
+     * a[slices/2][rows/2][0] = Re[slices/2][rows/2][0],
      * a[slices/2][rows/2][1] = Re[slices/2][rows/2][columns/2]
      * </pre>
-     * 
-     * 
+     *
+     *
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>realForwardFull</code>. To get back the
      * original data, use <code>realInverse</code> on the output of this method.
-     * 
+     *
      * @param a
      *            data to transform
      */
@@ -1058,7 +1058,7 @@ public strictfp class FloatFFT_3D {
      * array must be of size slices*rows*2*columns, with only the first slices*rows*columns elements
      * filled with real data. To get back the original data, use
      * <code>complexInverse</code> on the output of this method.
-     * 
+     *
      * @param a
      *            data to transform
      */
@@ -1105,7 +1105,7 @@ public strictfp class FloatFFT_3D {
      * array must be of size slices by rows by 2*columns, with only the first slices by rows by
      * columns elements filled with real data. To get back the original data, use
      * <code>complexInverse</code> on the output of this method.
-     * 
+     *
      * @param a
      *            data to transform
      */
@@ -1153,56 +1153,56 @@ public strictfp class FloatFFT_3D {
      * a[i*sliceStride + j*rowStride + k], where sliceStride = rows * 2 * columns and
      * rowStride = 2 * columns. The physical layout of the input data has to be as
      * follows:
-     * 
+     *
      * <pre>
      * a[k1*sliceStride + k2*rowStride + 2*k3] = Re[k1][k2][k3]
-     *                 = Re[(slices-k1)%slices][(rows-k2)%rows][columns-k3], 
+     *                 = Re[(slices-k1)%slices][(rows-k2)%rows][columns-k3],
      * a[k1*sliceStride + k2*rowStride + 2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(slices-k1)%slices][(rows-k2)%rows][columns-k3], 
-     *     0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;k3&lt;columns/2, 
+     *                   = -Im[(slices-k1)%slices][(rows-k2)%rows][columns-k3],
+     *     0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;k3&lt;columns/2,
      * a[k1*sliceStride + k2*rowStride] = Re[k1][k2][0]
-     *              = Re[(slices-k1)%slices][rows-k2][0], 
+     *              = Re[(slices-k1)%slices][rows-k2][0],
      * a[k1*sliceStride + k2*rowStride + 1] = Im[k1][k2][0]
-     *              = -Im[(slices-k1)%slices][rows-k2][0], 
+     *              = -Im[(slices-k1)%slices][rows-k2][0],
      * a[k1*sliceStride + (rows-k2)*rowStride + 1] = Re[(slices-k1)%slices][k2][columns/2]
-     *                 = Re[k1][rows-k2][columns/2], 
+     *                 = Re[k1][rows-k2][columns/2],
      * a[k1*sliceStride + (rows-k2)*rowStride] = -Im[(slices-k1)%slices][k2][columns/2]
-     *                 = Im[k1][rows-k2][columns/2], 
-     *     0&lt;=k1&lt;slices, 0&lt;k2&lt;rows/2, 
+     *                 = Im[k1][rows-k2][columns/2],
+     *     0&lt;=k1&lt;slices, 0&lt;k2&lt;rows/2,
      * a[k1*sliceStride] = Re[k1][0][0]
-     *             = Re[slices-k1][0][0], 
+     *             = Re[slices-k1][0][0],
      * a[k1*sliceStride + 1] = Im[k1][0][0]
-     *             = -Im[slices-k1][0][0], 
+     *             = -Im[slices-k1][0][0],
      * a[k1*sliceStride + (rows/2)*rowStride] = Re[k1][rows/2][0]
-     *                = Re[slices-k1][rows/2][0], 
+     *                = Re[slices-k1][rows/2][0],
      * a[k1*sliceStride + (rows/2)*rowStride + 1] = Im[k1][rows/2][0]
-     *                = -Im[slices-k1][rows/2][0], 
+     *                = -Im[slices-k1][rows/2][0],
      * a[(slices-k1)*sliceStride + 1] = Re[k1][0][columns/2]
-     *                = Re[slices-k1][0][columns/2], 
+     *                = Re[slices-k1][0][columns/2],
      * a[(slices-k1)*sliceStride] = -Im[k1][0][columns/2]
-     *                = Im[slices-k1][0][columns/2], 
+     *                = Im[slices-k1][0][columns/2],
      * a[(slices-k1)*sliceStride + (rows/2)*rowStride + 1] = Re[k1][rows/2][columns/2]
-     *                   = Re[slices-k1][rows/2][columns/2], 
+     *                   = Re[slices-k1][rows/2][columns/2],
      * a[(slices-k1)*sliceStride + (rows/2) * rowStride] = -Im[k1][rows/2][columns/2]
-     *                   = Im[slices-k1][rows/2][columns/2], 
-     *     0&lt;k1&lt;slices/2, 
-     * a[0] = Re[0][0][0], 
-     * a[1] = Re[0][0][columns/2], 
-     * a[(rows/2)*rowStride] = Re[0][rows/2][0], 
-     * a[(rows/2)*rowStride + 1] = Re[0][rows/2][columns/2], 
-     * a[(slices/2)*sliceStride] = Re[slices/2][0][0], 
-     * a[(slices/2)*sliceStride + 1] = Re[slices/2][0][columns/2], 
-     * a[(slices/2)*sliceStride + (rows/2)*rowStride] = Re[slices/2][rows/2][0], 
+     *                   = Im[slices-k1][rows/2][columns/2],
+     *     0&lt;k1&lt;slices/2,
+     * a[0] = Re[0][0][0],
+     * a[1] = Re[0][0][columns/2],
+     * a[(rows/2)*rowStride] = Re[0][rows/2][0],
+     * a[(rows/2)*rowStride + 1] = Re[0][rows/2][columns/2],
+     * a[(slices/2)*sliceStride] = Re[slices/2][0][0],
+     * a[(slices/2)*sliceStride + 1] = Re[slices/2][0][columns/2],
+     * a[(slices/2)*sliceStride + (rows/2)*rowStride] = Re[slices/2][rows/2][0],
      * a[(slices/2)*sliceStride + (rows/2)*rowStride + 1] = Re[slices/2][rows/2][columns/2]
      * </pre>
-     * 
+     *
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>realInverseFull</code>.
-     * 
+     *
      * @param a
      *            data to transform
-     * 
+     *
      * @param scale
      *            if true then scaling is performed
      */
@@ -1245,56 +1245,56 @@ public strictfp class FloatFFT_3D {
      * . This method only works when the sizes of all three dimensions are
      * power-of-two numbers. The data is stored in a 3D array. The physical
      * layout of the input data has to be as follows:
-     * 
+     *
      * <pre>
      * a[k1][k2][2*k3] = Re[k1][k2][k3]
-     *                 = Re[(slices-k1)%slices][(rows-k2)%rows][columns-k3], 
+     *                 = Re[(slices-k1)%slices][(rows-k2)%rows][columns-k3],
      * a[k1][k2][2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(slices-k1)%slices][(rows-k2)%rows][columns-k3], 
-     *     0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;k3&lt;columns/2, 
+     *                   = -Im[(slices-k1)%slices][(rows-k2)%rows][columns-k3],
+     *     0&lt;=k1&lt;slices, 0&lt;=k2&lt;rows, 0&lt;k3&lt;columns/2,
      * a[k1][k2][0] = Re[k1][k2][0]
-     *              = Re[(slices-k1)%slices][rows-k2][0], 
+     *              = Re[(slices-k1)%slices][rows-k2][0],
      * a[k1][k2][1] = Im[k1][k2][0]
-     *              = -Im[(slices-k1)%slices][rows-k2][0], 
+     *              = -Im[(slices-k1)%slices][rows-k2][0],
      * a[k1][rows-k2][1] = Re[(slices-k1)%slices][k2][columns/2]
-     *                 = Re[k1][rows-k2][columns/2], 
+     *                 = Re[k1][rows-k2][columns/2],
      * a[k1][rows-k2][0] = -Im[(slices-k1)%slices][k2][columns/2]
-     *                 = Im[k1][rows-k2][columns/2], 
-     *     0&lt;=k1&lt;slices, 0&lt;k2&lt;rows/2, 
+     *                 = Im[k1][rows-k2][columns/2],
+     *     0&lt;=k1&lt;slices, 0&lt;k2&lt;rows/2,
      * a[k1][0][0] = Re[k1][0][0]
-     *             = Re[slices-k1][0][0], 
+     *             = Re[slices-k1][0][0],
      * a[k1][0][1] = Im[k1][0][0]
-     *             = -Im[slices-k1][0][0], 
+     *             = -Im[slices-k1][0][0],
      * a[k1][rows/2][0] = Re[k1][rows/2][0]
-     *                = Re[slices-k1][rows/2][0], 
+     *                = Re[slices-k1][rows/2][0],
      * a[k1][rows/2][1] = Im[k1][rows/2][0]
-     *                = -Im[slices-k1][rows/2][0], 
+     *                = -Im[slices-k1][rows/2][0],
      * a[slices-k1][0][1] = Re[k1][0][columns/2]
-     *                = Re[slices-k1][0][columns/2], 
+     *                = Re[slices-k1][0][columns/2],
      * a[slices-k1][0][0] = -Im[k1][0][columns/2]
-     *                = Im[slices-k1][0][columns/2], 
+     *                = Im[slices-k1][0][columns/2],
      * a[slices-k1][rows/2][1] = Re[k1][rows/2][columns/2]
-     *                   = Re[slices-k1][rows/2][columns/2], 
+     *                   = Re[slices-k1][rows/2][columns/2],
      * a[slices-k1][rows/2][0] = -Im[k1][rows/2][columns/2]
-     *                   = Im[slices-k1][rows/2][columns/2], 
-     *     0&lt;k1&lt;slices/2, 
-     * a[0][0][0] = Re[0][0][0], 
-     * a[0][0][1] = Re[0][0][columns/2], 
-     * a[0][rows/2][0] = Re[0][rows/2][0], 
-     * a[0][rows/2][1] = Re[0][rows/2][columns/2], 
-     * a[slices/2][0][0] = Re[slices/2][0][0], 
-     * a[slices/2][0][1] = Re[slices/2][0][columns/2], 
-     * a[slices/2][rows/2][0] = Re[slices/2][rows/2][0], 
+     *                   = Im[slices-k1][rows/2][columns/2],
+     *     0&lt;k1&lt;slices/2,
+     * a[0][0][0] = Re[0][0][0],
+     * a[0][0][1] = Re[0][0][columns/2],
+     * a[0][rows/2][0] = Re[0][rows/2][0],
+     * a[0][rows/2][1] = Re[0][rows/2][columns/2],
+     * a[slices/2][0][0] = Re[slices/2][0][0],
+     * a[slices/2][0][1] = Re[slices/2][0][columns/2],
+     * a[slices/2][rows/2][0] = Re[slices/2][rows/2][0],
      * a[slices/2][rows/2][1] = Re[slices/2][rows/2][columns/2]
      * </pre>
-     * 
+     *
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>realInverseFull</code>.
-     * 
+     *
      * @param a
      *            data to transform
-     * 
+     *
      * @param scale
      *            if true then scaling is performed
      */
@@ -1339,7 +1339,7 @@ public strictfp class FloatFFT_3D {
      * part equal 0. Because the result is stored in <code>a</code>, the input
      * array must be of size slices*rows*2*columns, with only the first slices*rows*columns elements
      * filled with real data.
-     * 
+     *
      * @param a
      *            data to transform
      * @param scale
@@ -1387,7 +1387,7 @@ public strictfp class FloatFFT_3D {
      * part equal 0. Because the result is stored in <code>a</code>, the input
      * array must be of size slices by rows by 2*columns, with only the first slices by rows by
      * columns elements filled with real data.
-     * 
+     *
      * @param a
      *            data to transform
      * @param scale
@@ -2275,7 +2275,7 @@ public strictfp class FloatFFT_3D {
                     }
                 } else {
                     for (int r = 0; r < rows; r++) {
-                        fftColumns.realInverse(a, idx0 + r * rowStride, scale);
+                        fftColumns.realForward(a, idx0 + r * rowStride);
                     }
                 }
                 if (columns > 4) {
@@ -2435,7 +2435,7 @@ public strictfp class FloatFFT_3D {
                 }
                 if (icr != 0) {
                     for (int r = 0; r < rows; r++) {
-                        fftColumns.realForward(a, idx0 + r * rowStride);
+                        fftColumns.realInverse(a, idx0 + r * rowStride, scale);
                     }
                 }
             }
@@ -2631,7 +2631,7 @@ public strictfp class FloatFFT_3D {
                     }
                 } else {
                     for (int r = 0; r < rows; r++) {
-                        fftColumns.realInverse(a[s][r], 0, scale);
+                        fftColumns.realForward(a[s][r], 0);
                     }
                 }
                 if (columns > 4) {
@@ -2778,7 +2778,7 @@ public strictfp class FloatFFT_3D {
                 }
                 if (icr != 0) {
                     for (int r = 0; r < rows; r++) {
-                        fftColumns.realForward(a[s][r], 0);
+                        fftColumns.realInverse(a[s][r], 0, scale);
                     }
                 }
             }
@@ -3301,7 +3301,7 @@ public strictfp class FloatFFT_3D {
                                 }
                             } else {
                                 for (int r = 0; r < rows; r++) {
-                                    fftColumns.realInverse(a, idx0 + r * rowStride, scale);
+                                    fftColumns.realForward(a, idx0 + r * rowStride);
                                 }
                             }
                             if (columns > 4) {
@@ -3462,7 +3462,7 @@ public strictfp class FloatFFT_3D {
                             }
                             if (icr != 0) {
                                 for (int r = 0; r < rows; r++) {
-                                    fftColumns.realForward(a, idx0 + r * rowStride);
+                                    fftColumns.realInverse(a, idx0 + r * rowStride, scale);
                                 }
                             }
                         }
@@ -3697,7 +3697,7 @@ public strictfp class FloatFFT_3D {
                                 }
                             } else {
                                 for (int r = 0; r < rows; r++) {
-                                    fftColumns.realInverse(a[s][r], 0, scale);
+                                    fftColumns.realForward(a[s][r], 0);
                                 }
                             }
                             if (columns > 4) {
@@ -3845,7 +3845,7 @@ public strictfp class FloatFFT_3D {
                             }
                             if (icr != 0) {
                                 for (int r = 0; r < rows; r++) {
-                                    fftColumns.realForward(a[s][r]);
+                                    fftColumns.realInverse(a[s][r], scale);
                                 }
                             }
                         }
