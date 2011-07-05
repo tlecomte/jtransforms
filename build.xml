@@ -1,5 +1,5 @@
 <project basedir="." default="build" name="jtransforms">
-	<property name="version" value="2.4-SNAPSHOT" />
+	<property name="version" value="2.4" />
 
 	<property name="dist.dir" value="../${ant.project.name}-dist" />
 
@@ -80,7 +80,7 @@
 		<mkdir dir="${doc.dest}" />
 		<javadoc sourcepath="${javac.src}" destdir="${doc.dest}" public="true" author="true" use="true" splitIndex="true" version="true" doctitle="&lt;h2&gt;JTransforms&lt;/h2&gt;&lt;h4&gt;Multithreaded Fourier Transforms in Java&lt;/h4&gt;&lt;hr&gt;" windowtitle="${proj.title} ${version} - API Specification" header="&lt;b&gt;${proj.title} ${version}&lt;/b&gt;">
 			<packageset dir="${javac.src}" />
-			<packageset dir="${tests.src.dir}" />
+			<!--<packageset dir="${tests.src.dir}" />-->
 			<link href="http://java.sun.com/j2se/1.5/docs/api/" />
 		</javadoc>
 	</target>
