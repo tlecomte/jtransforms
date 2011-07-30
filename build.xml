@@ -11,11 +11,11 @@
 
 	<property name="doc.dest" value="doc" />
 
-	<property name="jar.dir" value="lib" />
+	<property name="jar.dir" value="${basedir}" />
 
 	<property name="jar.filename" value="${ant.project.name}-${version}.jar" />
 
-	<property name="src.tar.excludes" value="**/bin/** **/lib/** **/doc/** **/*.jardesc" />
+	<property name="src.tar.excludes" value="**/bin/** **/doc/** **/*.jardesc **/${jar.filename}" />
 
 	<property name="doc.tar.includes" value="**/doc/**" />
 
@@ -93,6 +93,7 @@
 		<zip zipfile="${dist.dir}/${ant.project.name}-${version}-src.zip" basedir=".." includes="${proj.basename}/" excludes="${src.tar.excludes}" />
 		<tar tarfile="${dist.dir}/${ant.project.name}-${version}-doc.tar.bz2" basedir=".." includes="${proj.basename}/${doc.tar.includes}" compression="bzip2" longfile="gnu" />
 		<zip zipfile="${dist.dir}/${ant.project.name}-${version}-doc.zip" basedir=".." includes="${proj.basename}/${doc.tar.includes}" />
+		<copy file="${jar.dir}/${jar.filename}" todir="${dist.dir}"/>
 	</target>
 
 

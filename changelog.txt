@@ -1,5 +1,5 @@
 JTransforms changelog
-2.4:    not yet released
+2.4:    July 30, 2011
     - Added support for unit-tests (JUnit)
     - Added support for code coverage analysis (Cobertura)
     - Updated Ant file accordingly (generation of HTML reports)
