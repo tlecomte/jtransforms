@@ -1104,10 +1104,11 @@ public strictfp class FloatFFT_1D {
 
     private void bluestein_complex(final float[] a, final int offa, final int isign) {
         final float[] ak = new float[2 * nBluestein];
-        int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
+        int nthreads = 1;
+        int threads = ConcurrencyUtils.getNumberOfThreads();
+        if ((threads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
             nthreads = 2;
-            if ((nthreads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
+            if ((threads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
                 nthreads = 4;
             }
             Future<?>[] futures = new Future[nthreads];
@@ -1268,10 +1269,11 @@ public strictfp class FloatFFT_1D {
 
     private void bluestein_real_full(final float[] a, final int offa, final int isign) {
         final float[] ak = new float[2 * nBluestein];
-        int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
+        int nthreads = 1;
+        int threads = ConcurrencyUtils.getNumberOfThreads();
+        if ((threads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
             nthreads = 2;
-            if ((nthreads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
+            if ((threads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
                 nthreads = 4;
             }
             Future<?>[] futures = new Future[nthreads];
@@ -1421,10 +1423,11 @@ public strictfp class FloatFFT_1D {
 
     private void bluestein_real_forward(final float[] a, final int offa) {
         final float[] ak = new float[2 * nBluestein];
-        int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
+        int nthreads = 1;
+        int threads = ConcurrencyUtils.getNumberOfThreads();
+        if ((threads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
             nthreads = 2;
-            if ((nthreads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
+            if ((threads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
                 nthreads = 4;
             }
             Future<?>[] futures = new Future[nthreads];
@@ -1570,10 +1573,11 @@ public strictfp class FloatFFT_1D {
 
         cftbsub(2 * nBluestein, ak, 0, ip, nw, w);
 
-        int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
+        int nthreads = 1;
+        int threads = ConcurrencyUtils.getNumberOfThreads();
+        if ((threads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
             nthreads = 2;
-            if ((nthreads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
+            if ((threads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
                 nthreads = 4;
             }
             Future<?>[] futures = new Future[nthreads];
@@ -1635,10 +1639,11 @@ public strictfp class FloatFFT_1D {
 
     private void bluestein_real_inverse2(final float[] a, final int offa) {
         final float[] ak = new float[2 * nBluestein];
-        int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
+        int nthreads = 1;
+        int threads = ConcurrencyUtils.getNumberOfThreads();
+        if ((threads > 1) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_2Threads())) {
             nthreads = 2;
-            if ((nthreads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
+            if ((threads >= 4) && (n > ConcurrencyUtils.getThreadsBeginN_1D_FFT_4Threads())) {
                 nthreads = 4;
             }
             Future<?>[] futures = new Future[nthreads];
