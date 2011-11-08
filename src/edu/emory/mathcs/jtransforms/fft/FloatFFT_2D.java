@@ -979,7 +979,7 @@ public strictfp class FloatFFT_2D {
         final float[][] temp = new float[n2d2][2 * rows];
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 >= nthreads)) {
+        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 - 2 >= nthreads)) {
             Future<?>[] futures = new Future[nthreads];
             int p = rows / nthreads;
             for (int l = 0; l < nthreads; l++) {
@@ -1000,7 +1000,7 @@ public strictfp class FloatFFT_2D {
             }
             fftRows.realForwardFull(temp[0]);
 
-            p = n2d2 / nthreads;
+            p = (n2d2 - 2) / nthreads;
             for (int l = 0; l < nthreads; l++) {
                 final int firstColumn = 1 + l * p;
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
@@ -1146,7 +1146,7 @@ public strictfp class FloatFFT_2D {
         final float[][] temp = new float[n2d2][2 * rows];
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 >= nthreads)) {
+        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 - 2 >= nthreads)) {
             Future<?>[] futures = new Future[nthreads];
             int p = rows / nthreads;
             for (int l = 0; l < nthreads; l++) {
@@ -1167,7 +1167,7 @@ public strictfp class FloatFFT_2D {
             }
             fftRows.realForwardFull(temp[0]);
 
-            p = n2d2 / nthreads;
+            p = (n2d2 - 2) / nthreads;
             for (int l = 0; l < nthreads; l++) {
                 final int firstColumn = 1 + l * p;
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
@@ -1320,7 +1320,7 @@ public strictfp class FloatFFT_2D {
         final float[][] temp = new float[n2d2][2 * rows];
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 >= nthreads)) {
+        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 - 2 >= nthreads)) {
             Future<?>[] futures = new Future[nthreads];
             int p = rows / nthreads;
             for (int l = 0; l < nthreads; l++) {
@@ -1341,7 +1341,7 @@ public strictfp class FloatFFT_2D {
             }
             fftRows.realInverseFull(temp[0], scale);
 
-            p = n2d2 / nthreads;
+            p = (n2d2 - 2) / nthreads;
             for (int l = 0; l < nthreads; l++) {
                 final int firstColumn = 1 + l * p;
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
@@ -1487,7 +1487,7 @@ public strictfp class FloatFFT_2D {
         final float[][] temp = new float[n2d2][2 * rows];
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 >= nthreads)) {
+        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 - 2 >= nthreads)) {
             Future<?>[] futures = new Future[nthreads];
             int p = rows / nthreads;
             for (int l = 0; l < nthreads; l++) {
@@ -1508,7 +1508,7 @@ public strictfp class FloatFFT_2D {
             }
             fftRows.realInverseFull(temp[0], scale);
 
-            p = n2d2 / nthreads;
+            p = (n2d2 - 2) / nthreads;
             for (int l = 0; l < nthreads; l++) {
                 final int firstColumn = 1 + l * p;
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
