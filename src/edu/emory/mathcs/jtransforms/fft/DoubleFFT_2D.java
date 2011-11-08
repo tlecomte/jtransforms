@@ -979,7 +979,7 @@ public class DoubleFFT_2D {
         final double[][] temp = new double[n2d2][2 * rows];
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 >= nthreads)) {
+        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 - 2 >= nthreads)) {
             Future<?>[] futures = new Future[nthreads];
             int p = rows / nthreads;
             for (int l = 0; l < nthreads; l++) {
@@ -1000,7 +1000,7 @@ public class DoubleFFT_2D {
             }
             fftRows.realForwardFull(temp[0]);
 
-            p = n2d2 / nthreads;
+            p = (n2d2 - 2) / nthreads;
             for (int l = 0; l < nthreads; l++) {
                 final int firstColumn = 1 + l * p;
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
@@ -1146,7 +1146,7 @@ public class DoubleFFT_2D {
         final double[][] temp = new double[n2d2][2 * rows];
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 >= nthreads)) {
+        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 - 2 >= nthreads)) {
             Future<?>[] futures = new Future[nthreads];
             int p = rows / nthreads;
             for (int l = 0; l < nthreads; l++) {
@@ -1167,7 +1167,7 @@ public class DoubleFFT_2D {
             }
             fftRows.realForwardFull(temp[0]);
 
-            p = n2d2 / nthreads;
+            p = (n2d2 - 2) / nthreads;
             for (int l = 0; l < nthreads; l++) {
                 final int firstColumn = 1 + l * p;
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
@@ -1187,7 +1187,7 @@ public class DoubleFFT_2D {
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
-
+            
             if ((columns % 2) == 0) {
                 for (int r = 0; r < rows; r++) {
                     temp[n2d2 - 1][r] = a[r * columns + 1];
@@ -1225,7 +1225,7 @@ public class DoubleFFT_2D {
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
-
+            
             for (int l = 0; l < nthreads; l++) {
                 final int firstRow = 1 + l * p;
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
@@ -1249,6 +1249,7 @@ public class DoubleFFT_2D {
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
+            
         } else {
             for (int r = 0; r < rows; r++) {
                 fftColumns.realForward(a, r * columns);
@@ -1320,7 +1321,7 @@ public class DoubleFFT_2D {
         final double[][] temp = new double[n2d2][2 * rows];
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 >= nthreads)) {
+        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 - 2 >= nthreads)) {
             Future<?>[] futures = new Future[nthreads];
             int p = rows / nthreads;
             for (int l = 0; l < nthreads; l++) {
@@ -1341,7 +1342,7 @@ public class DoubleFFT_2D {
             }
             fftRows.realInverseFull(temp[0], scale);
 
-            p = n2d2 / nthreads;
+            p = (n2d2 - 2) / nthreads;
             for (int l = 0; l < nthreads; l++) {
                 final int firstColumn = 1 + l * p;
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
@@ -1487,7 +1488,7 @@ public class DoubleFFT_2D {
         final double[][] temp = new double[n2d2][2 * rows];
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
-        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 >= nthreads)) {
+        if ((nthreads > 1) && useThreads && (rows >= nthreads) && (n2d2 - 2 >= nthreads)) {
             Future<?>[] futures = new Future[nthreads];
             int p = rows / nthreads;
             for (int l = 0; l < nthreads; l++) {
@@ -1508,7 +1509,7 @@ public class DoubleFFT_2D {
             }
             fftRows.realInverseFull(temp[0], scale);
 
-            p = n2d2 / nthreads;
+            p = (n2d2 - 2) / nthreads;
             for (int l = 0; l < nthreads; l++) {
                 final int firstColumn = 1 + l * p;
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
