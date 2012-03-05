@@ -88,6 +88,49 @@ public class ConcurrencyUtils {
     };
 
     /**
+     * Causes the currently executing thread to sleep (temporarily cease
+     * execution) for the specified number of milliseconds.
+     * 
+     * @param millis
+     */
+    public static void sleep(long millis) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Submits a Runnable task for execution and returns a Future representing
+     * that task.
+     * 
+     * @param task a Runnable task for execution
+     * @return a Future representing the task
+     */
+    public static Future<?> submit(Runnable task) {
+        return THREAD_POOL.submit(task);
+    }
+
+    /**
+     * Waits for all threads to complete computation.
+     * 
+     * @param futures
+     */
+    public static void waitForCompletion(Future<?>[] futures) {
+        int size = futures.length;
+        try {
+            for (int j = 0; j < size; j++) {
+                futures[j].get();
+            }
+        } catch (ExecutionException ex) {
+            ex.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Returns the number of available processors.
      * 
      * @return number of available processors
@@ -280,48 +323,5 @@ public class ConcurrencyUtils {
             p = p - 1;
         }
         return p;
-    }
-
-    /**
-     * Causes the currently executing thread to sleep (temporarily cease
-     * execution) for the specified number of milliseconds.
-     * 
-     * @param millis
-     */
-    public static void sleep(long millis) {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Submits a Runnable task for execution and returns a Future representing
-     * that task.
-     * 
-     * @param task a Runnable task for execution
-     * @return a Future representing the task
-     */
-    public static Future<?> submit(Runnable task) {
-        return THREAD_POOL.submit(task);
-    }
-
-    /**
-     * Waits for all threads to complete computation.
-     * 
-     * @param futures
-     */
-    public static void waitForCompletion(Future<?>[] futures) {
-        int size = futures.length;
-        try {
-            for (int j = 0; j < size; j++) {
-                futures[j].get();
-            }
-        } catch (ExecutionException ex) {
-            ex.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
