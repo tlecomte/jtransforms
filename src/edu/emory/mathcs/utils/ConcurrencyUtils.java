@@ -261,6 +261,26 @@ public class ConcurrencyUtils {
         else
             return (x & (x - 1)) == 0;
     }
+    
+    public static int extendDimension(int x) {
+        if (x < 1)
+            throw new IllegalArgumentException("x must be greater or equal 1");
+        int nextExp = nextExp2(x);
+        int nextPow = nextExp + 1;
+        int extDim = (int) Math.round(Math.pow(2.0, (double) nextPow));
+        return extDim;
+    }
+
+    public static int nextExp2(int n) {
+
+        double e = Math.log((double) n) / Math.log(2.0);
+        int p = (int) Math.ceil(e);
+        double f = n / Math.pow(2.0, (double) p);
+        if (f == 0.5) {
+            p = p - 1;
+        }
+        return p;
+    }
 
     /**
      * Causes the currently executing thread to sleep (temporarily cease
