@@ -48,10 +48,6 @@ public class IOUtils {
 
     private static final String FF = "%.4f";
 
-    private IOUtils() {
-
-    }
-
     /**
      * Fills 1D matrix with random numbers.
      * 
