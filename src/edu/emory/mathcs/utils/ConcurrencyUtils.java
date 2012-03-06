@@ -54,6 +54,8 @@ public class ConcurrencyUtils {
 
     private static int THREADS_BEGIN_N_1D_FFT_4THREADS = 65536;
 
+    private static int THREADS_BEGIN_N_1D = 32768;
+
     private static int THREADS_BEGIN_N_2D = 65536;
 
     private static int THREADS_BEGIN_N_3D = 65536;
@@ -161,6 +163,15 @@ public class ConcurrencyUtils {
     }
 
     /**
+     * Returns the minimal size of 1D data for which threads are used.
+     * 
+     * @return the minimal size of 1D data for which threads are used
+     */
+    public static int getThreadsBeginN_1D() {
+        return THREADS_BEGIN_N_1D;
+    }
+
+    /**
      * Returns the minimal size of 1D data for which two threads are used.
      * 
      * @return the minimal size of 1D data for which two threads are used
@@ -225,6 +236,16 @@ public class ConcurrencyUtils {
     }
 
     /**
+     * Sets the minimal size of 1D data for which threads are used.
+     * 
+     * @param n
+     *            the minimal size of 1D data for which threads are used
+     */
+    public static void setThreadsBeginN_1D(int n) {
+        THREADS_BEGIN_N_1D = n;
+    }
+
+    /**
      * Sets the minimal size of 2D data for which threads are used.
      * 
      * @param n
@@ -254,9 +275,10 @@ public class ConcurrencyUtils {
     }
 
     /**
-     * Resets the minimal size of 2D and 3D data for which threads are used.
+     * Resets the minimal size of 1D, 2D and 3D data for which threads are used.
      */
     public static void resetThreadsBeginN() {
+        THREADS_BEGIN_N_1D = 32768;
         THREADS_BEGIN_N_2D = 65536;
         THREADS_BEGIN_N_3D = 65536;
     }
