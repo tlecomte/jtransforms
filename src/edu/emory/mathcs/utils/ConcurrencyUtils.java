@@ -116,6 +116,7 @@ public class ConcurrencyUtils {
      * Waits for all threads to complete computation.
      * 
      * @param futures
+     *            handles to running threads
      */
     public static void waitForCompletion(Future<?>[] futures) {
         int size = futures.length;
