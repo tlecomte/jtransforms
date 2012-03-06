@@ -104,8 +104,9 @@ public class ConcurrencyUtils {
      * Submits a Runnable task for execution and returns a Future representing
      * that task.
      * 
-     * @param task a Runnable task for execution
-     * @return a Future representing the task
+     * @param task
+     *            task for execution
+     * @return a handle to the task submitted for execution
      */
     public static Future<?> submit(Runnable task) {
         return THREAD_POOL.submit(task);
