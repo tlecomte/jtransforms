@@ -60,7 +60,7 @@ public class ConcurrencyUtils {
 
     private static int THREADS_BEGIN_N_3D = 65536;
 
-    private static int NTHREADS = prevPow2(getNumberOfProcessors());
+    private static int NTHREADS = getNumberOfProcessors();
 
     private ConcurrencyUtils() {
 
@@ -153,15 +153,16 @@ public class ConcurrencyUtils {
     }
 
     /**
-     * Sets the number of threads. If n is not a power-of-two number, then the
-     * number of threads is set to the closest power-of-two number less than n.
+     * Sets the number of threads.
      * 
      * @param n
      */
     public static void setNumberOfThreads(int n) {
-        NTHREADS = prevPow2(n);
+        if (n < 1)
+            throw new IllegalArgumentException("n must be greater or equal 1");
+        NTHREADS = n;
     }
-
+    
     /**
      * Returns the minimal size of 1D data for which threads are used.
      * 
