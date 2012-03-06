@@ -62,10 +62,6 @@ public class ConcurrencyUtils {
 
     private static int NTHREADS = getNumberOfProcessors();
 
-    private ConcurrencyUtils() {
-
-    }
-
     private static class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
         public void uncaughtException(Thread t, Throwable e) {
             e.printStackTrace();
