@@ -83,6 +83,7 @@ public class ConcurrencyUtils {
         public Thread newThread(Runnable r) {
             Thread t = defaultFactory.newThread(r);
             t.setUncaughtExceptionHandler(handler);
+            t.setDaemon(true);
             return t;
         }
     };
