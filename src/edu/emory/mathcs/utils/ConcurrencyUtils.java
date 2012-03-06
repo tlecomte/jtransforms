@@ -33,6 +33,7 @@
  * ***** END LICENSE BLOCK ***** */
 package edu.emory.mathcs.utils;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -98,6 +99,19 @@ public class ConcurrencyUtils {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Submits a value-returning task for execution and returns a Future
+     * representing the pending results of the task.
+     * 
+     * @param <T>
+     * @param task
+     *            task for execution
+     * @return a handle to the task submitted for execution
+     */
+    public static <T> Future<T> submit(Callable<T> task) {
+        return THREAD_POOL.submit(task);
     }
 
     /**
